@@ -29,7 +29,7 @@
       "startDate": "2018-02-01",
       "summary": "Blockchain based company",
       "highlights": [
-        "Research consensue algoriths",
+        "Research consensus algorithms",
         "Build prototypes in golang"
       ]
     }, {
@@ -79,7 +79,6 @@
       }, {
         "company": "Quantis Labs",
         "position": "Trading NOC",
-        "website": "https://nextnine.com",
         "startDate": "2010-08-10",
         "endDate": "2011-02-01",
         "summary": "Quanits labs were an algorithmic trading company.",
