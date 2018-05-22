@@ -42,12 +42,12 @@
         "highlights": [
           "Software developer in Wix.Com innovation labs",
           "Created closed source transpiler",
-          "Developed vscode plugin: https://github.com/wix/stylable-intelligence",
-          "Developed and mainted custom made CI system",
+          "Developed a vscode plugin: https://github.com/wix/stylable-intelligence",
+          "Developed and maintained custom made CI system",
           "Docker, git, AWS, NPM, Selenium, Karma, Mocha, Sinon, Chai, verdaccio",
           "Typescript, React, Webpack, ES6/7, Transpilers, htmlparser2",
           "TDD style development.",
-          "Interviewed and assisted with onboarding of junior developers."
+          "Interviewed and assisted with on-boarding of junior developers."
         ]
       }, {
         "company": "NextNine.Com",
@@ -101,11 +101,11 @@
     },{
         "organization": "Israeli Role-playing society",
         "position": "Many",
-        "summery": "Promote the hobbie of roleplaying",
+        "summery": "Promote the hobby of roleplaying",
         "startDate":"2001-01-01",
         "endDate":"2008-01-01",
         "highlights": [
-            "Organised games with hundered of participants",
+            "Organized games with hundreds of participants",
             "Leadership the live roleplaying group"
           ]
     }
