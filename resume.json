@@ -45,7 +45,7 @@
           "Developed a vscode plugin: https://github.com/wix/stylable-intelligence.",
           "Developed and maintained custom made CI system.",
           "Docker, git, AWS, NPM, Selenium, Karma, Mocha, Sinon, Chai, verdaccio.",
-          "Typescript, React, Webpack, ES6/7, Transpilers, htmlparser2.",
+          "Typescript, React, Webpack, ES6/7, transpilers, htmlparser2.",
           "TDD style development.",
           "Interviewed and assisted with on-boarding of junior developers."
         ]
@@ -105,7 +105,7 @@
         "startDate":"2001-01-01",
         "endDate":"2008-01-01",
         "highlights": [
-            "Organiz/ed games with hundreds of participants",
+            "Organized games with hundreds of participants",
             "Leadership the live roleplaying group."
           ]
     }
