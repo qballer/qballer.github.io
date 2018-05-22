@@ -40,12 +40,12 @@
         "endDate": "2017-12-17",
         "summary": "Wix.com is a leading cloud-based web development platform.",
         "highlights": [
-          "Software developer in Wix.Com innovation labs",
-          "Created closed source transpiler",
-          "Developed a vscode plugin: https://github.com/wix/stylable-intelligence",
-          "Developed and maintained custom made CI system",
-          "Docker, git, AWS, NPM, Selenium, Karma, Mocha, Sinon, Chai, verdaccio",
-          "Typescript, React, Webpack, ES6/7, Transpilers, htmlparser2",
+          "Software developer in Wix.Com innovation labs.",
+          "Created closed source transpiler.",
+          "Developed a vscode plugin: https://github.com/wix/stylable-intelligence.",
+          "Developed and maintained custom made CI system.",
+          "Docker, git, AWS, NPM, Selenium, Karma, Mocha, Sinon, Chai, verdaccio.",
+          "Typescript, React, Webpack, ES6/7, Transpilers, htmlparser2.",
           "TDD style development.",
           "Interviewed and assisted with on-boarding of junior developers."
         ]
@@ -99,14 +99,14 @@
         "Participated in the first year of 'Avihai' program."
       ]
     },{
-        "organization": "Israeli Role-playing society",
+        "organization": "Israeli Role-playing society.",
         "position": "Many",
-        "summery": "Promote the hobby of roleplaying",
+        "summery": "Promote the hobby of roleplaying.",
         "startDate":"2001-01-01",
         "endDate":"2008-01-01",
         "highlights": [
-            "Organized games with hundreds of participants",
-            "Leadership the live roleplaying group"
+            "Organiz/ed games with hundreds of participants",
+            "Leadership the live roleplaying group."
           ]
     }
   ],
