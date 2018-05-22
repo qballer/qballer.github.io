@@ -2,9 +2,8 @@
   "basics": {
     "name": "Doron Tsur",
     "picture": "",
-    "email": "qballer@gmail.com",
     "phone": "(972) 54-634-2237",
-    "summary": "",
+    "summary": "I’m a software developer in the JavaScript (ES6/TS) ecosystem with background in C++/Java. Would love to work with great people, technology and scale while using and creating open source software. Playing around with python and golang these days.",
     "location": {
       "city": "Tel-Aviv",
       "countryCode": "IL"
@@ -12,6 +11,7 @@
     "profiles": [
       {
         "network": "Linkedin",
+        "username": "Doron",
         "url": "https://www.linkedin.com/in/doron-tsur-38087322/"
       },
       {
@@ -41,8 +41,8 @@
         "summary": "Wix.com is a leading cloud-based web development platform.",
         "highlights": [
           "Software developer in Wix.Com innovation labs",
-          "Create closed source transpiler",
-          "Developed vscode plugin.",
+          "Created closed source transpiler",
+          "Developed vscode plugin: https://github.com/wix/stylable-intelligence",
           "Developed and mainted custom made CI system",
           "Docker, git, AWS, NPM, Selenium, Karma, Mocha, Sinon, Chai, verdaccio",
           "Typescript, React, Webpack, ES6/7, Transpilers, htmlparser2",
@@ -61,7 +61,7 @@
           "Research SVN, XMPP, and WebRTC",
           "Used tools such as Jira, IntelliJ and VC6 with technologies like COM, OO4O, MSADO and WINAPI32.",
           "Experience in the Linux system and open source in general.",
-          "Interviewd external consultants"
+          "Interviewed external consultants"
         ]
       }, {
         "company": "NextNine.Com",
@@ -78,10 +78,10 @@
         ]
       }, {
         "company": "Quantis Labs",
-        "position": "Software Engineer",
+        "position": "Trading NOC",
         "website": "https://nextnine.com",
         "startDate": "2010-08-01",
-        "endDate": "2012-02-15",
+        "endDate": "2011-02-15",
         "summary": "Quanits labs were an algorithmic trading company.",
         "highlights": [
             "Monitor and control an automatic trading software.",
@@ -90,17 +90,22 @@
         ]
       }
   ],
-  "volunteer": [
-    {
-      "organization": "CoderDojo",
-      "position": "Teacher",
-      "website": "http://coderdojo.com/",
-      "startDate": "2012-01-01",
-      "endDate": "2013-01-01",
-      "summary": "Global movement of free coding clubs for young people.",
+  "volunteer": [{
+      "organization": "Jewish Agency",
+      "position": "Camp Counselor", 
       "highlights": [
-        "Awarded 'Teacher of the Month'"
+        "Jewish camp counselor in the rock climbing, hiking and social field.",
+        "Lead a group of Israeli kids to a US summer camp.",
+        "Participated in the first year of 'Avihai' program."
       ]
+    },{
+        "organization": "Israeli Role-playing society",
+        "position": "Many",
+        "summery": "Promote the hobbie of roleplaying",
+        "highlights": [
+            "Organised games with hundered of participants",
+            "Leadership the live roleplaying group"
+          ]
     }
   ],
   "education": [
@@ -108,17 +113,6 @@
       "institution": "Tel Aviv Yafo academic college",
       "area": "Computers Science",
       "studyType": "Bachelor"
-    }
-  ],
-  "skills": [
-    {
-      "name": "Web Development",
-      "level": "Master",
-      "keywords": [
-        "HTML",
-        "CSS",
-        "Javascript"
-      ]
     }
   ],
   "languages": [

@@ -1,0 +1,15 @@
+{
+  "name": "qballer.github.io",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:qballer/qballer.github.io.git",
+  "author": "qballer <qballer@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "resume export index.html --theme stackoverflow"
+  },
+  "dependencies": {
+    "jsonresume-theme-stackoverflow": "^1.4.0",
+    "resume-cli": "^0.4.19"
+  }
+}
