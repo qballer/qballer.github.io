@@ -68,7 +68,7 @@
         "position": "Support Engineer",
         "website": "https://nextnine.com",
         "startDate": "2011-07-01",
-        "endDate": "2015-07-12",
+        "endDate": "2012-08-01",
         "summary": "NextNine provides OT security solution for critical infrastructures using remote services and automation.",
         "highlights": [
           "Provide Tier 3 support for the company's main product.",
@@ -80,8 +80,8 @@
         "company": "Quantis Labs",
         "position": "Trading NOC",
         "website": "https://nextnine.com",
-        "startDate": "2010-08-01",
-        "endDate": "2011-02-15",
+        "startDate": "2010-08-10",
+        "endDate": "2011-02-01",
         "summary": "Quanits labs were an algorithmic trading company.",
         "highlights": [
             "Monitor and control an automatic trading software.",
@@ -93,6 +93,7 @@
   "volunteer": [{
       "organization": "Jewish Agency",
       "position": "Camp Counselor", 
+      "endDate": "2008-07-01",
       "highlights": [
         "Jewish camp counselor in the rock climbing, hiking and social field.",
         "Lead a group of Israeli kids to a US summer camp.",
@@ -102,6 +103,8 @@
         "organization": "Israeli Role-playing society",
         "position": "Many",
         "summery": "Promote the hobbie of roleplaying",
+        "startDate":"2001-01-01",
+        "endDate":"2008-01-01",
         "highlights": [
             "Organised games with hundered of participants",
             "Leadership the live roleplaying group"
