@@ -114,7 +114,8 @@
     {
       "institution": "Tel Aviv Yafo academic college",
       "area": "Computers Science",
-      "studyType": "Bachelor"
+      "studyType": "Bachelor",
+      "endDate": "2016-03-01"
     }
   ],
   "languages": [
