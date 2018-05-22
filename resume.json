@@ -1,0 +1,133 @@
+{
+  "basics": {
+    "name": "Doron Tsur",
+    "picture": "",
+    "email": "qballer@gmail.com",
+    "phone": "(972) 54-634-2237",
+    "summary": "",
+    "location": {
+      "city": "Tel-Aviv",
+      "countryCode": "IL"
+    },
+    "profiles": [
+      {
+        "network": "Linkedin",
+        "url": "https://www.linkedin.com/in/doron-tsur-38087322/"
+      },
+      {
+        "network": "Github",
+        "username": "qballer",
+        "url": "https://github.com/qballer"
+      }
+    ]
+  },
+  "work": [
+    {
+      "company": "emergent.technology",
+      "position": "Senior Software Engineer",
+      "website": "http://emergent.technology/",
+      "startDate": "2018-02-01",
+      "summary": "Blockchain based company",
+      "highlights": [
+        "Research consensue algoriths",
+        "Build prototypes in golang"
+      ]
+    }, {
+        "company": "Wix.Com",
+        "position": "Software Developer",
+        "website": "Wix.com",
+        "startDate": "2015-08-01",
+        "endDate": "2017-12-17",
+        "summary": "Wix.com is a leading cloud-based web development platform.",
+        "highlights": [
+          "Software developer in Wix.Com innovation labs",
+          "Create closed source transpiler",
+          "Developed vscode plugin.",
+          "Developed and mainted custom made CI system",
+          "Docker, git, AWS, NPM, Selenium, Karma, Mocha, Sinon, Chai, verdaccio",
+          "Typescript, React, Webpack, ES6/7, Transpilers, htmlparser2",
+          "TDD style development.",
+          "Interviewed and assisted with onboarding of junior developers."
+        ]
+      }, {
+        "company": "NextNine.Com",
+        "position": "Software Engineer",
+        "website": "https://nextnine.com",
+        "startDate": "2012-08-01",
+        "endDate": "2015-07-15",
+        "summary": "NextNine provides OT security solution for critical infrastructures using remote services and automation.",
+        "highlights": [
+          "As a C++ Developer I was responsible for two parts of NextNine solution, the core of an enterprise web application and the Main node of a distributed system.",
+          "Research SVN, XMPP, and WebRTC",
+          "Used tools such as Jira, IntelliJ and VC6 with technologies like COM, OO4O, MSADO and WINAPI32.",
+          "Experience in the Linux system and open source in general.",
+          "Interviewd external consultants"
+        ]
+      }, {
+        "company": "NextNine.Com",
+        "position": "Support Engineer",
+        "website": "https://nextnine.com",
+        "startDate": "2011-07-01",
+        "endDate": "2015-07-12",
+        "summary": "NextNine provides OT security solution for critical infrastructures using remote services and automation.",
+        "highlights": [
+          "Provide Tier 3 support for the company's main product.",
+          "Track down production system bottlenecks and unknown issues.",
+          "Provide workarounds and code solutions. Backup the professional services team. ",
+          "Developed in Perl, VBScript and Java"
+        ]
+      }, {
+        "company": "Quantis Labs",
+        "position": "Software Engineer",
+        "website": "https://nextnine.com",
+        "startDate": "2010-08-01",
+        "endDate": "2012-02-15",
+        "summary": "Quanits labs were an algorithmic trading company.",
+        "highlights": [
+            "Monitor and control an automatic trading software.",
+            "Provide technical support for the company’s product.",
+            "Fix in house tools and monitor the software’s network."
+        ]
+      }
+  ],
+  "volunteer": [
+    {
+      "organization": "CoderDojo",
+      "position": "Teacher",
+      "website": "http://coderdojo.com/",
+      "startDate": "2012-01-01",
+      "endDate": "2013-01-01",
+      "summary": "Global movement of free coding clubs for young people.",
+      "highlights": [
+        "Awarded 'Teacher of the Month'"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Tel Aviv Yafo academic college",
+      "area": "Computers Science",
+      "studyType": "Bachelor"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Web Development",
+      "level": "Master",
+      "keywords": [
+        "HTML",
+        "CSS",
+        "Javascript"
+      ]
+    }
+  ],
+  "languages": [
+    {
+      "language": "Hebrew",
+      "fluency": "Native speaker"
+    }, {
+        "language": "English",
+        "fluency": "Fluent"
+      }
+  ]
+}
