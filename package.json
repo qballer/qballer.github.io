@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "build": "resume export index.html --theme stackoverflow",
-    "publish:cv": "node_modules/.bin/resume export index.html && git commit -am \"update CV\" && git push"
+    "publish:cv": "node_modules/.bin/resume export index.html --theme stackoverflow && git commit -am \"update CV\" && git push"
   },
   "dependencies": {
     "jsonresume-theme-stackoverflow": "^1.4.0",
