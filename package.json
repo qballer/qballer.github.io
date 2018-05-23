@@ -6,7 +6,8 @@
   "author": "qballer <qballer@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "resume export index.html --theme stackoverflow"
+    "build": "resume export index.html --theme stackoverflow",
+    "publish:cv": "node_modules/.bin/resume export index.html && git commit -am \"update CV\" && git push"
   },
   "dependencies": {
     "jsonresume-theme-stackoverflow": "^1.4.0",
