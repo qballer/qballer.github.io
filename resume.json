@@ -22,12 +22,25 @@
       }
     ]
   },
-  "work": [
-    {
+  "work": [{
+        "company": "Bit",
+        "position": "Senior Software Engineer",
+        "website": "Bit.dev",
+        "startDate": "2018-07-15",
+        "summary": "Bit.dev is javascript component platform.",
+        "highlights": [
+          "In house search solution",
+          "Worked on open source developer tools https://github.com/teambit/envs",
+          "Interviewed engineering candidates.",
+          "Loads of work around TypeScript, Jest, Mocha, Webpack, ESM etc",
+          "More of everything - startup"
+        ]
+      }, {
       "company": "emergent.technology",
       "position": "Senior Software Engineer",
       "website": "http://emergent.technology/",
       "startDate": "2018-02-01",
+      "endDate": "2018-06-01",
       "summary": "Blockchain based company",
       "highlights": [
         "Research consensus algorithms",
