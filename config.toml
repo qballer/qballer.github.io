@@ -47,7 +47,7 @@ navigation = [
     # { url = "https://getzola.com/", title = "Zola", is_external = true }
 ]
 
-home_title = "doron_tsur = \"Freelance Tech Lead\""
+home_title = "Freelance Tech Lead"
 home_content = "Backend Development, Microservices, Infrastucture, and more."
 social_icons = [
     { url = "https://github.com/qballer", title = "GitHub", icon = "github" },
