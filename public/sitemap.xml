@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://yay.dev/</loc>
+    </url>
+    <url>
+        <loc>https://yay.dev/archive/</loc>
+    </url>
+    <url>
+        <loc>https://yay.dev/posts/</loc>
+    </url>
+    <url>
+        <loc>https://yay.dev/showcase/</loc>
+    </url>
+    <url>
+        <loc>https://yay.dev/tags/</loc>
+    </url>
+    <url>
+        <loc>https://yay.dev/theme/</loc>
+    </url>
+    <url>
+        <loc>https://yay.dev/zola/</loc>
+    </url>
+</urlset>
