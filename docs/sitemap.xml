@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>http://127.0.0.1/</loc>
+        <loc>https://qballer.github.io/</loc>
     </url>
     <url>
-        <loc>http://127.0.0.1/archive/</loc>
+        <loc>https://qballer.github.io/archive/</loc>
     </url>
     <url>
-        <loc>http://127.0.0.1/posts/</loc>
+        <loc>https://qballer.github.io/posts/</loc>
     </url>
     <url>
-        <loc>http://127.0.0.1/showcase/</loc>
+        <loc>https://qballer.github.io/showcase/</loc>
     </url>
     <url>
-        <loc>http://127.0.0.1/tags/</loc>
+        <loc>https://qballer.github.io/tags/</loc>
     </url>
     <url>
-        <loc>http://127.0.0.1/theme/</loc>
+        <loc>https://qballer.github.io/theme/</loc>
     </url>
     <url>
-        <loc>http://127.0.0.1/zola/</loc>
+        <loc>https://qballer.github.io/zola/</loc>
     </url>
 </urlset>
