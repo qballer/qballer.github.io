@@ -48,7 +48,7 @@ navigation = [
 ]
 
 home_title = "Doron Tsur: Freelance Tech Lead🦾"
-home_content = "Backend Development, Microservices, Infrastucture.<br/>Languages: Typescript, Golang, Rust, Ruby on Rails.<br/>Technolgies: Kubernetes, Cloud, Terraform, Devops. <br/>Contact me if you would like to work together."
+home_content = "Backend Development, Microservices, Infrastucture.<br/>Typescript, Golang, Rust, Ruby on Rails.<br/> Kubernetes, Cloud, Devops. <br/>Contact me if you would like to work together."
 social_icons = [
     { url = "https://github.com/qballer", title = "GitHub", icon = "github" },
     { url = "https://twitter.com/qbllr_", title = "Twitter", icon = "twitter" },
