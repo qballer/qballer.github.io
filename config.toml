@@ -48,10 +48,10 @@ navigation = [
 ]
 
 home_title = "Freelance Tech Lead"
-home_content = "Backend Development, Microservices, Infrastucture, and more."
+home_content = "Backend Development, Microservices, Infrastucture, and more. <br/>Contact me if you would like to work together."
 social_icons = [
     { url = "https://github.com/qballer", title = "GitHub", icon = "github" },
     { url = "https://twitter.com/qbllr_", title = "Twitter", icon = "twitter" },
     { url = "https://www.linkedin.com/in/doron-tsur-38087322/", title = "Linkedin", icon = "linkedin" },
-    { url = "$BASE_URL/atom.xml", title = "RSS", icon = "rss" },
+    # { url = "$BASE_URL/atom.xml", title = "RSS", icon = "rss" },
 ]
