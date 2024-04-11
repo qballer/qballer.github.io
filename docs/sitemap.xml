@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://yay.dev/</loc>
+        <loc>http://127.0.0.1/</loc>
     </url>
     <url>
-        <loc>https://yay.dev/archive/</loc>
+        <loc>http://127.0.0.1/archive/</loc>
     </url>
     <url>
-        <loc>https://yay.dev/posts/</loc>
+        <loc>http://127.0.0.1/posts/</loc>
     </url>
     <url>
-        <loc>https://yay.dev/showcase/</loc>
+        <loc>http://127.0.0.1/showcase/</loc>
     </url>
     <url>
-        <loc>https://yay.dev/tags/</loc>
+        <loc>http://127.0.0.1/tags/</loc>
     </url>
     <url>
-        <loc>https://yay.dev/theme/</loc>
+        <loc>http://127.0.0.1/theme/</loc>
     </url>
     <url>
-        <loc>https://yay.dev/zola/</loc>
+        <loc>http://127.0.0.1/zola/</loc>
     </url>
 </urlset>
