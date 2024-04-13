@@ -52,6 +52,6 @@ home_content = "Backend Development, Microservices, Infrastucture.<br/>Typescrip
 social_icons = [
     { url = "https://github.com/qballer", title = "GitHub", icon = "github" },
     { url = "https://twitter.com/qbllr_", title = "Twitter", icon = "twitter" },
-    { url = "https://www.linkedin.com/in/doron-tsur-38087322/", title = "Linkedin", icon = "linkedin" },
+    { url = "https://www.linkedin.com/in/yaydev", title = "Linkedin", icon = "linkedin" },
     # { url = "$BASE_URL/atom.xml", title = "RSS", icon = "rss" },
 ]
