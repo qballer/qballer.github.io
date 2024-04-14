@@ -28,7 +28,7 @@ title = "yay.dev"
 default_theme = "auto"
 theme = "dark"
 language_direction = "auto"
-keywords = ["Software Development", "Freelance", "Open Source", "Coding", "Rust", "Golang", "Typescript"]
+keywords = ["Software Development", "Freelance", "Open Source", "Coding", "Python", "Golang", "Typescript"]
 show_theme_toggle = true
 show_scroll_to_top = true
 show_code_copy_buttons = true
@@ -48,7 +48,7 @@ navigation = [
 ]
 
 home_title = "Doron Tsur: Freelance Tech Lead🦾"
-home_content = "Backend Development, Microservices, Infrastucture.<br/>Typescript, Golang, Rust, Ruby on Rails.<br/> Kubernetes, Cloud, Devops. <br/>Contact me if you would like to work together."
+home_content = "Backend Development, Microservices, Infrastucture.<br/>Typescript, Golang, Python, Ruby on Rails.<br/> Kubernetes, Cloud, Devops. <br/>Contact me if you would like to work together."
 social_icons = [
     { url = "https://github.com/qballer", title = "GitHub", icon = "github" },
     { url = "https://twitter.com/qbllr_", title = "Twitter", icon = "twitter" },
