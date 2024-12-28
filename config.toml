@@ -4,8 +4,8 @@ base_url = "https://abridge.netlify.app"
 # Also set index format = "elasticlunr_javascript", and in [extra] uglyurls = true, integrity = false
 # If you use the npm/node script then all you have to do is set search_library = "offline", and everything else is automatic.
 
-title = "Abridge"
-description = "Abridge is a fast, lightweight, and modern Zola theme (class-light, semantic HTML). Perfect Lighthouse, YellowLabTools, and Observatory scores." #for SEO aim for 140-180 Characters
+title = "Yay.dev"
+description = "Yay.dev - Yay for developers" #for SEO aim for 140-180 Characters
 theme = "abridge"
 
 default_language = "en"
@@ -43,49 +43,6 @@ external_links_target_blank = true # rel="noopener"
 external_links_no_follow = false   # rel="nofollow"
 external_links_no_referrer = false # rel="noreferrer"
 smart_punctuation = false          # `...` to `…`, `"quote"` to `“curly”` etc
-
-# Any Extra language you do not use, delete or comment out the extra language sections:
-[languages.fr]
-title = "Abridge"
-description = "Abridge est un thème Zola rapide et léger utilisant le html sémantique, le CSS abridge.css class-light et aucun JS obligatoire."
-generate_feeds = true
-build_search_index = true
-search.include_title = true                                                                                                                     # include title of page/section in index
-search.include_description = true                                                                                                               # include description of page/section in index
-search.include_content = true                                                                                                                   # include rendered content of page/section in index
-# search.truncate_content_length = 100 # Truncate at nth character. May be useful if index is getting too large.
-taxonomies = [
-  #    {name = "categories", feed = true},
-  { name = "tags", feed = true },
-]
-
-[languages.es]
-title = "Abridge"
-description = "Abridge es un tema de Zola rápido y liviano que utiliza HTML semántico, CSS ligero de clase abridge.css y JS no obligatorio."
-generate_feeds = true
-build_search_index = true
-search.include_title = true                                                                                                                  # include title of page/section in index
-search.include_description = true                                                                                                            # include description of page/section in index
-search.include_content = true                                                                                                                # include rendered content of page/section in index
-# search.truncate_content_length = 100 # Truncate at nth character. May be useful if index is getting too large.
-taxonomies = [
-  #    {name = "categories", feed = true},
-  { name = "tags", feed = true },
-]
-
-[languages.pt]
-title = "Abridge"
-description = "Abridge é um tema rápido e leve que usa HTML semântico, CSS de clase leve abridge.css y JS não obrigatório."
-generate_feeds = true
-build_search_index = true
-search.include_title = true                                                                                                 # include title of page/section in index
-search.include_description = true                                                                                           # include description of page/section in index
-search.include_content = true                                                                                               # include rendered content of page/section in index
-# search.truncate_content_length = 100 # Truncate at nth character. May be useful if index is getting too large.
-taxonomies = [
-  #    {name = "categories", feed = true},
-  { name = "tags", feed = true },
-]
 
 [extra]
 ###############################################################################
@@ -126,7 +83,7 @@ hide_page_nextprev_titles = false # hides the next/previous titles for pages tha
 title_size_index = "s85"
 footer_size = "s80"               # the size of the copyright and powered by text
 footer_credit = true
-#footer_credit_override = '<p class="s90">Powered by <a href="https://www.getzola.org/" target="_blank">Zola</a> &#38; <a href="https://github.com/Jieiku/abridge/" target="_blank">Abridge</a></p>'
+footer_credit_override = ''
 #archive_reverse = true # Set to True to sort posts chronologically per year instead of newest first on the archive page: example.com/archive/
 
 ### Uncomment one of the below lines, or neither, depending on which type of logo you want to use:
@@ -169,29 +126,29 @@ seo = true                                                                      
 ###   https://github.com/Jieiku/abridge/blob/master/templates/macros/social.html
 ###############################################################################
 
-feed = true                                         # this adds the RSS feed icon in the footer.
-mail = "name@example.com"
-mastodon = "https://mastodon.example.com/@username"
-element = "matrix.example.com"
+feed = true            # this adds the RSS feed icon in the footer.
+mail = "doron@yay.dev"
+# mastodon = "https://cmastodon.example.com/@username"
+# element = "matrix.example.com"
 #buymeacoffee = "your-user-name"
-kofi = "your-user-name"
+# kofi = "your-user-name"
 #discord = "your-discord" # Everything after https://discord.com/   eg: invite/my-server  *or*  servers/my-server-id
-#twitter = "your-user-name"
+twitter = "qbllr_"
 #facebook = "your-user-name"
-#linkedin = "your-user-name"
+linkedin = "yaydev"
 #gitlab = "your-user-name"
-github = "your-user-name"
+github = "qballer"
 #codeberg = "your-user-name" # Everything after https://codeberg.org/   eg: username  *or*  username/repository
 #github_sponsor = "your-user-name"
 #bitbucket = "your-user-name"
 #python = "your-user-name"
 #docker = "your-user-name"
 #stack = "your-user-name"
-instagram = "your-user-name"
+# instagram = "your-user-name"
 #pixelfed = "https://pixelfed.example.com/" # Heaviest icon, off by default
 #pinterest = "your-user-name"
-twitch = "your-user-name"
-youtube = "channel/your-channel-id"
+# twitch = "your-user-name"
+# youtube = "channel/your-channel-id"
 #peertube = "https://peertube.example.com/@username"
 #researchgate = "your-profile-id"
 #telegram = "your-user-name"
