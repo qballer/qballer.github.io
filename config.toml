@@ -53,21 +53,17 @@ smart_punctuation = false          # `...` to `…`, `"quote"` to `“curly”` 
 ###############################################################################
 
 menu = [
-  #    {url = "blog", name = "Blog", slash = true, blank = false, size="s110"},
-  #    {url = "about", name = "About", slash = true, blank = false, size="s110"},
-  { url = "archive", name = "Posts", slash = true, blank = false, size = "s110" },
-  #    {url = "categories", name = "Categories", slash = true, blank = false, size="s110"},
-  { url = "tags", name = "Tags", slash = true, blank = false, size = "s110" },
+    #  {url = "blog", name = "Blog", slash = true, blank = false, size="s110"},
+     {url = "archive", name = "Posts", slash = true, blank = false, size = "s110" },
+     {url = "about", name = "About", slash = true, blank = false, size="s110"},
+  # { url = "tags", name = "Tags", slash = true, blank = false, size = "s110" },
 ]
 menu_footer = [
-  { url = "about", name = "About", slash = true, blank = false, size = "s90" },
-  { url = "contact", name = "Contact", slash = true, blank = false, size = "s90" },
-  { url = "privacy", name = "Privacy", slash = true, blank = false, size = "s90" },
-  { url = "sitemap.xml", name = "Sitemap", slash = false, blank = true, size = "s90" },
+  # { url = "about", name = "About", slash = true, blank = false, size = "s90" },
 ]
 
-toc = true
-recent = true     # TOC / index
+toc = false
+recent = false     # TOC / index
 recent_items = 15
 series = true
 series_items = 9  # Max number of items to display in series list, use 0 to disable
@@ -109,8 +105,8 @@ foothr = false   # show or hide horizontal rule above footer
 
 title_separator = "|"                                                                                 # Separator between title and title_addition, set as |, -, _, etc
 title_addition = "Fast, Lightweight, and Modern Zola Theme"                                           # a default value for title addition (for SEO aim for 50-70 characters including the title and separator 'Abridge | title_addition')
-author = "Jake G"                                                                                     # Put Your Name here
-keywords = "Abridge, Abridge.css, Zola, Theme, Zola Theme, getzola, Semantic Html, Fast, lightweight" # used for the primary site index
+author = "Doron Tsur"                                                                                     # Put Your Name here
+keywords = "" # used for the primary site index
 banner = "banner.png"                                                                                 # Used as default image for OpenGraph/Twitter if page specific image is undefined.
 twitter_meta = "your-user-name"                                                                       # for SEO: twitter:site and twitter:creator
 google = "Your Google Site verification code."
