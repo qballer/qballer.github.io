@@ -1,5 +1,5 @@
 # do NOT include a trailing slash on the base URL
-base_url = "https://abridge.netlify.app"
+base_url = "https://yay.dev"
 # Usable site directly from disk, Including Search: "/home/jieiku/.dev/abridge/public"
 # Also set index format = "elasticlunr_javascript", and in [extra] uglyurls = true, integrity = false
 # If you use the npm/node script then all you have to do is set search_library = "offline", and everything else is automatic.
@@ -104,11 +104,11 @@ foothr = false   # show or hide horizontal rule above footer
 ###############################################################################
 
 title_separator = "|"                                                                                 # Separator between title and title_addition, set as |, -, _, etc
-title_addition = "Fast, Lightweight, and Modern Zola Theme"                                           # a default value for title addition (for SEO aim for 50-70 characters including the title and separator 'Abridge | title_addition')
+title_addition = "Yay for developers"                                           # a default value for title addition (for SEO aim for 50-70 characters including the title and separator '')
 author = "Doron Tsur"                                                                                     # Put Your Name here
 keywords = "" # used for the primary site index
 banner = "banner.png"                                                                                 # Used as default image for OpenGraph/Twitter if page specific image is undefined.
-twitter_meta = "your-user-name"                                                                       # for SEO: twitter:site and twitter:creator
+twitter_meta = "qbllr_"                                                                       # for SEO: twitter:site and twitter:creator
 google = "Your Google Site verification code."
 bing = "Your Bing Site verification code."
 seo = true                                                                                            # enable or disable seo-related meta tags: opengraph, facebook, twitter
