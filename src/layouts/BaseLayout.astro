@@ -13,12 +13,69 @@ interface Props {
   noindex?: boolean;
 }
 const { title, description, image, type, noindex } = Astro.props;
+
+// Structured data — helps search engines and LLMs resolve the entity (who
+// Doron is, what he knows, where else he is online) and cite it confidently.
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE.url}/#website`,
+      url: `${SITE.url}/`,
+      name: SITE.name,
+      description: SITE.description,
+      inLanguage: 'en',
+      publisher: { '@id': `${SITE.url}/#person` },
+    },
+    {
+      '@type': 'Person',
+      '@id': `${SITE.url}/#person`,
+      name: SITE.author,
+      url: `${SITE.url}/`,
+      jobTitle: SITE.role,
+      description:
+        'Platform and distributed systems engineer. Independent consulting practice (yay.dev) and partner at Codo.',
+      knowsAbout: [
+        'Platform engineering',
+        'Distributed systems',
+        'Large scale search',
+        'OpenSearch',
+        'Elasticsearch',
+        'ClickHouse',
+        'Data pipelines',
+        'Change data capture',
+        'Apache Kafka',
+        'AWS',
+        'Terraform',
+        'Kubernetes',
+        'TypeScript',
+        'Rust',
+        'Go',
+        'Python',
+        'PostgreSQL',
+      ],
+      alumniOf: {
+        '@type': 'CollegeOrUniversity',
+        name: 'The Academic College of Tel Aviv-Yaffo',
+      },
+      sameAs: [
+        'https://github.com/qballer',
+        'https://www.linkedin.com/in/doron-tsur',
+      ],
+    },
+  ],
+};
 ---
 
 <!doctype html>
 <html lang={SITE.locale}>
   <head>
     <Seo {title} {description} {image} {type} {noindex} />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(structuredData)}
+    />
   </head>
   <body>
     <a href="#main" class="skip-link">Skip to content</a>
@@ -27,5 +84,11 @@ const { title, description, image, type, noindex } = Astro.props;
       <slot />
     </main>
     <Footer />
+    <!-- Cloudflare Web Analytics (cookieless) -->
+    <script
+      is:inline
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token": "26c7282bdd4d46a2934c8326d83c64c1"}'></script>
   </body>
 </html>

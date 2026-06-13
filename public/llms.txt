@@ -1,0 +1,37 @@
+# yay.dev — Doron Tsur
+
+> Doron Tsur is a Platform & Distributed Systems Architect with 15 years of
+> experience building the infrastructure other teams rely on: large scale
+> search, data pipelines, event driven systems, and the infrastructure as code
+> underneath them. He runs an independent consulting practice (yay.dev) and is
+> a partner at Codo.
+
+## About
+
+- Role: Platform & Distributed Systems Architect
+- Practice: yay.dev (independent consulting), Founder & Principal Consultant
+- Partner & Senior System Architect at Codo
+- Based in Israel. Works end to end: architecture, the hard performance core,
+  and the operations to run it. Test driven by default.
+- Core stack: TypeScript, Rust, Go, Python, AWS, Terraform, Kubernetes,
+  OpenSearch / Elasticsearch, ClickHouse, Apache Kafka, PostgreSQL.
+- Focus areas: large scale search, data pipelines and change data capture,
+  event driven and distributed systems, platform/infrastructure engineering.
+
+## Pages
+
+- [Home](https://yay.dev/): overview, services, and stack.
+- [Résumé](https://yay.dev/resume): full experience (Codo, yay.dev practice
+  with engagements, HoneyBook, Cloudinary, Tikal, Bit, Wix), skills, education.
+- [Talks](https://yay.dev/talks): conference talks — "TestContainers: Real
+  Integration Tests Without the Pain" (NodeTLV 2025) and "Are we Deno yet?"
+  (NodeTLV 2021).
+- [Blog](https://yay.dev/blog): notes on platform engineering, distributed
+  systems, search and data infrastructure.
+- [Contact](https://yay.dev/contact): contact form and links.
+
+## Contact
+
+- LinkedIn: https://www.linkedin.com/in/doron-tsur
+- GitHub: https://github.com/qballer
+- Contact form: https://yay.dev/contact
