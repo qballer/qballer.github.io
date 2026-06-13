@@ -6,7 +6,7 @@
   publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "22"
+  NODE_VERSION = "24"
 
 # Astro emits a 404.html; serve it on unmatched routes.
 [[redirects]]
