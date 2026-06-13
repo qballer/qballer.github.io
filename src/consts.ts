@@ -29,6 +29,7 @@ export const TALKS: {
   event: string;
   year: string;
   thumb: string;
+  youtubeId: string;
   links: { label: string; href: string }[];
 }[] = [
   {
@@ -36,6 +37,7 @@ export const TALKS: {
     event: 'NodeTLV',
     year: '2025',
     thumb: '/talks/testcontainers.jpg',
+    youtubeId: 'Eea247tlBAc',
     links: [{ label: 'Watch', href: 'https://www.youtube.com/watch?v=Eea247tlBAc' }],
   },
   {
@@ -43,6 +45,7 @@ export const TALKS: {
     event: 'NodeTLV',
     year: '2021',
     thumb: '/talks/deno.jpg',
+    youtubeId: '0FfzP7Tmlmc',
     links: [
       { label: 'Watch (English)', href: 'https://www.youtube.com/watch?v=0FfzP7Tmlmc' },
       { label: 'Hebrew version', href: 'https://www.youtube.com/watch?v=uM64dDlBikI' },

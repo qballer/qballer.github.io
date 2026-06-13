@@ -31,7 +31,7 @@ body {
   /* faint glow at the top so the void isn't dead flat */
   background-image: radial-gradient(
     1200px 600px at 50% -10%,
-    rgba(90, 247, 142, 0.05),
+    rgba(76, 141, 249, 0.08),
     transparent 70%
   );
   background-repeat: no-repeat;

@@ -7,7 +7,7 @@ import { TALKS } from '../consts';
   title="Talks"
   description="Conference talks by Doron Tsur, including NodeTLV: TestContainers and 'Are we Deno yet?'."
 >
-  <div class="wrap prose">
+  <div class="wrap">
     <p class="eyebrow">// talks</p>
     <h1>Talks</h1>
     <p class="lede">Conference talks and meetups. Mostly Node, testing and runtimes.</p>
@@ -16,7 +16,14 @@ import { TALKS } from '../consts';
       {
         TALKS.map((t) => (
           <li class="talk">
-            <a class="thumb" href={t.links[0].href} target="_blank" rel="noopener noreferrer" aria-label={`Watch: ${t.title}`}>
+            <a
+              class="thumb"
+              href={t.links[0].href}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-yt={t.youtubeId}
+              aria-label={`Play: ${t.title}`}
+            >
               <img src={t.thumb} alt={`${t.title}, ${t.event} ${t.year}`} loading="lazy" width="1280" height="720" />
               <span class="play" aria-hidden="true">▶</span>
             </a>
@@ -36,6 +43,8 @@ import { TALKS } from '../consts';
   </div>
 </BaseLayout>
 
+<script is:inline defer src="/talks.js"></script>
+
 <style>
   .lede {
     color: var(--text-dim);
@@ -45,13 +54,13 @@ import { TALKS } from '../consts';
     margin: var(--sp-8) 0 0;
     padding: 0;
     display: grid;
-    gap: var(--sp-8);
+    gap: var(--sp-12);
   }
   .talk {
-    display: grid;
-    grid-template-columns: 320px 1fr;
-    gap: var(--sp-6);
-    align-items: start;
+    max-width: 760px;
+  }
+  .meta {
+    margin-top: var(--sp-4);
   }
   .thumb {
     position: relative;
@@ -86,6 +95,15 @@ import { TALKS } from '../consts';
   .thumb:hover .play {
     color: var(--accent);
     transform: scale(1.1);
+  }
+  /* :global because the iframe is injected by talks.js and won't carry
+     Astro's scoped-style hash — without this it falls back to 300px. */
+  :global(.yt-frame) {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 1px solid var(--border-bright);
+    border-radius: var(--radius);
+    display: block;
   }
   .meta h2 {
     margin: var(--sp-1) 0 var(--sp-3);
