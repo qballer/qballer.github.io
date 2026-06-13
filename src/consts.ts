@@ -58,6 +58,8 @@ export const TALKS: {
 export const SOCIALS: { label: string; href: string }[] = [
   { label: 'GitHub', href: 'https://github.com/qballer' },
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/doron-tsur' },
+  // wa.me number is international format, no + or leading 0 (IL 054... -> 97254...)
+  { label: 'WhatsApp', href: 'https://wa.me/972546342237' },
 ];
 
 // Form notification target (used by Netlify Forms config, not shown on-page).
