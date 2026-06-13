@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SocialLinks from '../components/SocialLinks.astro';
+import { TALKS } from '../consts';
 
 type Role = {
   org: string;
@@ -146,7 +147,7 @@ const skills: { group: string; items: string[] }[] = [
 
 <BaseLayout
   title="Résumé"
-  description="Doron Tsur toPlatform & Distributed Systems Architect. 15 years building large-scale search, data pipelines and the infrastructure underneath them."
+  description="Doron Tsur · Platform & Distributed Systems Architect. 15 years building large scale search, data pipelines and the infrastructure underneath them."
 >
   <div class="wrap prose resume">
     <header class="r-head">
@@ -226,6 +227,24 @@ const skills: { group: string; items: string[] }[] = [
           ))
         }
       </dl>
+    </section>
+
+    <section aria-labelledby="speaking">
+      <h2 id="speaking">Speaking</h2>
+      <ul class="talks-list">
+        {
+          TALKS.map((t) => (
+            <li>
+              <a href={t.links[0].href} target="_blank" rel="noopener noreferrer">
+                {t.title}
+              </a>
+              <span class="talk-venue">
+                {t.event} {t.year}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
     </section>
 
     <section aria-labelledby="edu">
@@ -348,7 +367,28 @@ const skills: { group: string; items: string[] }[] = [
     padding: var(--sp-2) var(--sp-3);
   }
 
-  /* Clean print → PDF (recruiters can print this to a tidy doc) */
+  .talks-list {
+    list-style: none;
+    margin: var(--sp-4) 0 0;
+    padding: 0;
+  }
+  .talks-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--sp-4);
+    padding: var(--sp-2) 0;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .talk-venue {
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+
+  /* Clean print to PDF (recruiters can print this to a tidy doc) */
   @media print {
     :global(body) {
       background: #fff !important;

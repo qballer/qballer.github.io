@@ -17,8 +17,40 @@ export const SITE = {
 // Top navigation (left logo links home)
 export const NAV: { label: string; href: string }[] = [
   { label: 'Résumé', href: '/resume' },
+  { label: 'Talks', href: '/talks' },
   { label: 'Blog', href: '/blog' },
   { label: 'Contact', href: '/contact' },
+];
+
+// Conference talks (public, no rights concerns). Thumbnails self-hosted in
+// /public/talks so we link out to YouTube without weakening the CSP.
+export const TALKS: {
+  title: string;
+  event: string;
+  year: string;
+  thumb: string;
+  youtubeId: string;
+  links: { label: string; href: string }[];
+}[] = [
+  {
+    title: 'TestContainers: Real Integration Tests Without the Pain',
+    event: 'NodeTLV',
+    year: '2025',
+    thumb: '/talks/testcontainers.jpg',
+    youtubeId: 'Eea247tlBAc',
+    links: [{ label: 'Watch', href: 'https://www.youtube.com/watch?v=Eea247tlBAc' }],
+  },
+  {
+    title: 'Are we Deno yet?',
+    event: 'NodeTLV',
+    year: '2021',
+    thumb: '/talks/deno.jpg',
+    youtubeId: '0FfzP7Tmlmc',
+    links: [
+      { label: 'Watch (English)', href: 'https://www.youtube.com/watch?v=0FfzP7Tmlmc' },
+      { label: 'Hebrew version', href: 'https://www.youtube.com/watch?v=uM64dDlBikI' },
+    ],
+  },
 ];
 
 // Contact channels. Email is intentionally NOT rendered as a visible mailto:

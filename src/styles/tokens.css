@@ -1,19 +1,20 @@
 /* Design tokens — terminal / hacker aesthetic.
    Phosphor-green accent on a near-black base. */
 :root {
-  /* color */
-  --bg: #0a0d0c;
-  --bg-soft: #101513;
-  --bg-card: #0f1412;
-  --border: #1d2723;
-  --border-bright: #2c3a34;
-  --text: #c7d3cc;
-  --text-bright: #eaf2ee;
-  --text-dim: #7c8a83;
-  --accent: #5af78e; /* terminal green */
-  --accent-dim: #2ea043;
-  --accent-glow: rgba(90, 247, 142, 0.15);
-  --danger: #f78a5a;
+  /* color — navy base + brand amber accent (matches the yay.dev logo) */
+  --bg: #0b1a2b;
+  --bg-soft: #122439;
+  --bg-card: #102134;
+  --border: #21384f;
+  --border-bright: #2f4d69;
+  --text: #c4d2e1;
+  --text-bright: #eef4fb;
+  --text-dim: #7e93a9;
+  --accent: #faca2b; /* brand amber */
+  --accent-dim: #c99a1e;
+  --accent-glow: rgba(250, 202, 43, 0.18);
+  --accent-blue: #4c8df9; /* brand blue, secondary */
+  --danger: #ee3923; /* brand red */
 
   /* type */
   --font-mono: ui-monospace, "JetBrains Mono", "Cascadia Code", "SF Mono",

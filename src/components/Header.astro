@@ -1,6 +1,7 @@
 ---
 import { NAV } from '../consts';
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const segment = path === '/' ? '' : path; // terminal-prompt path, e.g. /resume
 const isActive = (href: string) =>
   href === '/' ? path === '/' : path === href || path.startsWith(href + '/');
 ---
@@ -8,8 +9,12 @@ const isActive = (href: string) =>
 <header class="site-header">
   <div class="wrap bar">
     <a href="/" class="logo" aria-label="yay.dev home">
-      <span class="logo__prompt">~/</span><span class="logo__name">yay.dev</span
-      ><span class="logo__caret" aria-hidden="true">█</span>
+      <img class="logo__mark" src="/logo-symbol.svg" alt="" width="26" height="29" />
+      <span class="logo__text"
+        ><span class="logo__prompt">~/</span>yay.dev<span class="logo__seg"
+          >{segment}</span
+        ><span class="logo__caret" aria-hidden="true">█</span></span
+      >
     </a>
     <nav aria-label="Primary">
       <ul>
@@ -44,6 +49,9 @@ const isActive = (href: string) =>
     gap: var(--sp-4);
   }
   .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
     font-family: var(--font-mono);
     font-size: var(--fs-lg);
     font-weight: 600;
@@ -51,11 +59,16 @@ const isActive = (href: string) =>
     border: none;
     white-space: nowrap;
   }
+  .logo__mark {
+    width: 24px;
+    height: auto;
+    display: block;
+  }
   .logo__prompt {
     color: var(--accent-dim);
   }
-  .logo__name {
-    color: var(--text-bright);
+  .logo__seg {
+    color: var(--text-dim);
   }
   .logo__caret {
     color: var(--accent);
