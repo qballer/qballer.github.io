@@ -108,17 +108,39 @@ const experience: Role[] = [
   },
 ];
 
-const stack = [
-  'TypeScript',
-  'Rust',
-  'Go',
-  'Python',
-  'AWS (ECS, S3, DynamoDB, SQS)',
-  'Terraform',
-  'OpenSearch / Elasticsearch',
-  'ClickHouse',
-  'Kubernetes',
-  'PostgreSQL',
+const skills: { group: string; items: string[] }[] = [
+  {
+    group: 'Languages',
+    items: ['TypeScript', 'Go', 'Python', 'Rust', 'Ruby', 'JavaScript'],
+  },
+  {
+    group: 'Cloud & infra',
+    items: ['AWS (ECS, S3, RDS, DynamoDB, SQS)', 'Terraform', 'Kubernetes', 'Helm', 'GCP'],
+  },
+  {
+    group: 'Data & search',
+    items: [
+      'OpenSearch / Elasticsearch',
+      'ClickHouse',
+      'PostgreSQL',
+      'MySQL',
+      'MongoDB',
+      'Redis',
+      'Apache Kafka',
+    ],
+  },
+  {
+    group: 'Architecture',
+    items: [
+      'Distributed systems',
+      'Microservices',
+      'System architecture',
+      'Data modeling',
+      'Compilers',
+      'Test driven development',
+    ],
+  },
+  { group: 'Earlier', items: ['Java', 'C++', 'C'] },
 ];
 ---
 
@@ -187,10 +209,23 @@ const stack = [
     </section>
 
     <section aria-labelledby="stack">
-      <h2 id="stack">Stack</h2>
-      <ul class="chips">
-        {stack.map((t) => <li>{t}</li>)}
-      </ul>
+      <h2 id="stack">Skills</h2>
+      <dl class="skills">
+        {
+          skills.map((g) => (
+            <div class="skill-group">
+              <dt>{g.group}</dt>
+              <dd>
+                <ul class="chips">
+                  {g.items.map((t) => (
+                    <li>{t}</li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
     </section>
 
     <section aria-labelledby="edu">
@@ -269,12 +304,38 @@ const stack = [
   .sub-block h4 {
     font-size: var(--fs-base);
   }
+  .skills {
+    margin: var(--sp-4) 0 0;
+    display: grid;
+    gap: var(--sp-4);
+  }
+  .skill-group {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: var(--sp-4);
+    align-items: start;
+  }
+  .skill-group dt {
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+    color: var(--accent-dim);
+    padding-top: var(--sp-2);
+  }
+  .skill-group dd {
+    margin: 0;
+  }
+  @media (max-width: 560px) {
+    .skill-group {
+      grid-template-columns: 1fr;
+      gap: var(--sp-2);
+    }
+  }
   .chips {
     display: flex;
     flex-wrap: wrap;
     gap: var(--sp-2) var(--sp-3);
     list-style: none;
-    margin: var(--sp-4) 0 0;
+    margin: 0;
     padding: 0;
   }
   .chips li {
