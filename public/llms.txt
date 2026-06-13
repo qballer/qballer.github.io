@@ -32,6 +32,9 @@
 
 ## Contact
 
+- Contact form: https://yay.dev/contact
 - LinkedIn: https://www.linkedin.com/in/doron-tsur
 - GitHub: https://github.com/qballer
-- Contact form: https://yay.dev/contact
+- WhatsApp: https://wa.me/972546342237
+
+Full version: https://yay.dev/llms-full.txt
