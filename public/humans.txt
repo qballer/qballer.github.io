@@ -1,0 +1,11 @@
+/* TEAM */
+Doron Tsur — Platform & Distributed Systems Architect
+Site: https://yay.dev
+GitHub: https://github.com/qballer
+LinkedIn: https://www.linkedin.com/in/doron-tsur
+WhatsApp: https://wa.me/972546342237
+
+/* SITE */
+Built with: Astro (static), hosted on Netlify
+Standards: HTML5, semantic markup, JSON-LD structured data
+Languages: English, Hebrew

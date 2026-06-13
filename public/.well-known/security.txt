@@ -1,0 +1,5 @@
+# Security contact for yay.dev
+Contact: https://yay.dev/contact
+Preferred-Languages: en, he
+Canonical: https://yay.dev/.well-known/security.txt
+Expires: 2027-06-13T00:00:00.000Z

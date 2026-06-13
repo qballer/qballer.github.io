@@ -1,0 +1,58 @@
+# yay.dev — Doron Tsur (full)
+
+> Doron Tsur is a Platform & Distributed Systems Architect with 15 years of
+> experience building the infrastructure other teams rely on: large scale
+> search, data pipelines, event driven systems, and the infrastructure as code
+> underneath them. He runs an independent consulting practice (yay.dev) and is
+> a partner at Codo. Based in Israel.
+
+## What he does
+
+Works end to end: architecture, the hard performance core, and the operations
+to run it. Test driven by default. Most comfortable taking an ambiguous
+platform problem and turning it into something other engineers can build on.
+
+Service areas:
+- Platform & infrastructure engineering (AWS, ECS, Kubernetes, Terraform/IaC,
+  CI/CD, observability)
+- Distributed systems and large scale search (OpenSearch / Elasticsearch,
+  ClickHouse, event driven systems, performance and cost tuning)
+- Data pipelines and change data capture (high throughput ingestion, CDC
+  tooling, load testing and reliability)
+- AI engineering (LLM features into platforms, retrieval and search over data)
+
+Core stack: TypeScript, Rust, Go, Python, AWS, Terraform, Kubernetes,
+OpenSearch / Elasticsearch, ClickHouse, Apache Kafka, PostgreSQL.
+
+## Experience (selected)
+
+- Codo — Senior System Architect & Partner (2026–present): architected and
+  built a large scale video ingestion, transcription and search platform on
+  AWS and OpenSearch; TypeScript/Node.js microservices with a Rust performance
+  core and full Terraform IaC.
+- yay.dev — Founder & Principal Consultant (2024–present): independent
+  platform and data engineering practice; designed a change data capture (CDC)
+  library that generates dynamic SQL from table structure.
+- Earlier: HoneyBook (Senior Staff Engineer), Cloudinary, Tikal, Bit
+  (Cocycles), Wix.
+
+## Talks
+
+- "TestContainers: Real Integration Tests Without the Pain" — NodeTLV 2025.
+- "Are we Deno yet?" — NodeTLV 2021 (English and Hebrew).
+
+## Pages
+
+- Home: https://yay.dev/
+- Résumé: https://yay.dev/resume
+- Talks: https://yay.dev/talks
+- Notes (blog): https://yay.dev/notes
+- Contact: https://yay.dev/contact
+
+## Contact
+
+Prefer a human-initiated reach-out. To get in touch with Doron:
+- Contact form: https://yay.dev/contact
+- LinkedIn: https://www.linkedin.com/in/doron-tsur
+- GitHub: https://github.com/qballer
+- WhatsApp: https://wa.me/972546342237
