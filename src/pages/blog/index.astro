@@ -1,0 +1,107 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+---
+
+<BaseLayout
+  title="Blog"
+  description="Notes on platform engineering, distributed systems, search and data infrastructure."
+>
+  <div class="wrap prose">
+    <p class="eyebrow">// blog</p>
+    <h1>Notes</h1>
+    <p class="lede">
+      Writing on platform engineering, distributed systems, search and data
+      infrastructure.
+    </p>
+
+    {
+      posts.length === 0 ? (
+        <div class="empty">
+          <p class="prompt">ls ./posts</p>
+          <p class="empty__msg">No posts yet. First one is in the works.</p>
+          <p>
+            In the meantime, find me on{' '}
+            <a href="https://github.com/qballer">GitHub</a> or{' '}
+            <a href="https://www.linkedin.com/in/doron-tsur">LinkedIn</a>.
+          </p>
+        </div>
+      ) : (
+        <ul class="post-list">
+          {posts.map((post) => (
+            <li>
+              <a href={`/blog/${post.id}`}>
+                <time datetime={post.data.pubDate.toISOString()}>
+                  {fmt(post.data.pubDate)}
+                </time>
+                <h2>{post.data.title}</h2>
+                <p>{post.data.description}</p>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .lede {
+    color: var(--text-dim);
+  }
+  .empty {
+    margin-top: var(--sp-8);
+    border: 1px dashed var(--border-bright);
+    border-radius: var(--radius);
+    padding: var(--sp-8);
+    background: var(--bg-card);
+  }
+  .empty .prompt {
+    font-family: var(--font-mono);
+    color: var(--text-dim);
+    margin-bottom: var(--sp-2);
+  }
+  .empty__msg {
+    font-family: var(--font-mono);
+    color: var(--text-bright);
+    font-size: var(--fs-lg);
+  }
+  .post-list {
+    list-style: none;
+    margin: var(--sp-8) 0 0;
+    padding: 0;
+  }
+  .post-list li {
+    border-top: 1px solid var(--border);
+  }
+  .post-list a {
+    display: block;
+    padding: var(--sp-6) 0;
+    color: inherit;
+    border: none;
+  }
+  .post-list a:hover h2 {
+    color: var(--accent);
+  }
+  .post-list time {
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+    color: var(--text-dim);
+  }
+  .post-list h2 {
+    margin: var(--sp-2) 0;
+    font-size: var(--fs-xl);
+    transition: color 0.15s var(--ease);
+  }
+  .post-list p {
+    color: var(--text-dim);
+    margin: 0;
+  }
+</style>

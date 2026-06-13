@@ -1,0 +1,386 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SocialLinks from '../components/SocialLinks.astro';
+
+type Role = {
+  org: string;
+  title: string;
+  dates: string;
+  location?: string;
+  bullets: string[];
+  sub?: { org: string; title: string; dates: string; bullets: string[] }[];
+};
+
+const experience: Role[] = [
+  {
+    org: 'Codo',
+    title: 'Senior System Architect · Partner',
+    dates: 'Mar 2026 to Present',
+    location: 'Tel Aviv District, Israel',
+    bullets: [
+      'Partner in Codo, a growing engineering consultancy tohelping build the firm and serving as lead architect.',
+      'Architected and built a large scale video ingestion, transcription and search platform on AWS and OpenSearch.',
+      'TypeScript / Node.js microservices, a Rust performance core, full Terraform IaC; led the delivery team.',
+    ],
+  },
+  {
+    org: 'yay.dev',
+    title: 'Founder · Principal Consultant',
+    dates: 'Mar 2024 to Present',
+    bullets: [
+      'Independent practice: finding, scoping and delivering platform and data engagements end to end.',
+      'Designed a change data capture (CDC) library that generates dynamic SQL from table structure; large scale search and data infrastructure across clients.',
+    ],
+    sub: [
+      {
+        org: 'Dazl',
+        title: 'Senior System Architect (contract)',
+        dates: 'Aug 2025 to Feb 2026',
+        bullets: [
+          'Platform and infrastructure engineering for an AI application builder.',
+          'Owned IaC (Terraform, Atlantis) and built an ECS service orchestrating isolated per user dev environments with DynamoDB state.',
+        ],
+      },
+      {
+        org: 'Astrix Security',
+        title: 'Technical Lead (contract)',
+        dates: 'May 2024 to Aug 2025',
+        bullets: [
+          'Platform consultancy for the platform group.',
+          'Built and scaled a hand crafted data pipeline, including heavy load testing; scaled PostgreSQL.',
+        ],
+      },
+    ],
+  },
+  {
+    org: 'HoneyBook',
+    title: 'Senior Staff Engineer',
+    dates: 'Mar 2023 to Apr 2024',
+    bullets: [
+      'Led platform and infrastructure efforts.',
+      'Tech Lead for the AI task force integrating AI into the platform.',
+      'Partnered with R&D teams on complex technical challenges.',
+    ],
+  },
+  {
+    org: 'Cloudinary',
+    title: 'Senior Software Engineer',
+    dates: 'Sep 2021 to Nov 2022',
+    bullets: [
+      'Designed and implemented infrastructure for fairness and scalability.',
+      'Built a custom event driven service mesh to manage high scale traffic for machine learning models.',
+    ],
+  },
+  {
+    org: 'Tikal · Fullstack as a Service',
+    title: 'Full Stack Technical Lead',
+    dates: 'Jul 2020 to Sep 2021',
+    bullets: [
+      'Led development of a Node.js microservices platform from scratch.',
+      'Worked with clients including WalkMe and Montara; served as Elasticsearch consultant for performance and scalability.',
+    ],
+  },
+  {
+    org: 'Bit (Cocycles)',
+    title: 'Senior Software Developer',
+    dates: 'Jul 2018 to Jul 2020',
+    bullets: [
+      'Worked on search, code analysis, compilers and developer tools.',
+      'Implemented a search engine for JavaScript components and integrated Bit with leading JS toolchains (TypeScript).',
+    ],
+  },
+  {
+    org: 'Wix.com',
+    title: 'Software Developer',
+    dates: 'Aug 2015 to Dec 2017',
+    bullets: [
+      'Designed a custom compiler for a DSL built on React, with a continuous integration system built on a dependency graph.',
+      'Built a React WYSIWYG projectional editor for developers (TypeScript).',
+    ],
+  },
+  {
+    org: 'NextNine',
+    title: 'Software Engineer (from Support Engineer)',
+    dates: 'Jul 2011 to Jul 2015',
+    bullets: [
+      'Grew from Tier 3 support into software engineering: coding, system design and feature delivery; tracked down production bottlenecks.',
+    ],
+  },
+];
+
+const skills: { group: string; items: string[] }[] = [
+  {
+    group: 'Languages',
+    items: ['TypeScript', 'Go', 'Python', 'Rust', 'Ruby', 'JavaScript'],
+  },
+  {
+    group: 'Cloud & infra',
+    items: ['AWS (ECS, S3, RDS, DynamoDB, SQS)', 'Terraform', 'Kubernetes', 'Helm', 'GCP'],
+  },
+  {
+    group: 'Data & search',
+    items: [
+      'OpenSearch / Elasticsearch',
+      'ClickHouse',
+      'PostgreSQL',
+      'MySQL',
+      'MongoDB',
+      'Redis',
+      'Apache Kafka',
+    ],
+  },
+  {
+    group: 'Architecture',
+    items: [
+      'Distributed systems',
+      'Microservices',
+      'System architecture',
+      'Data modeling',
+      'Compilers',
+      'Test driven development',
+    ],
+  },
+  { group: 'Earlier', items: ['Java', 'C++', 'C'] },
+];
+---
+
+<BaseLayout
+  title="Résumé"
+  description="Doron Tsur toPlatform & Distributed Systems Architect. 15 years building large-scale search, data pipelines and the infrastructure underneath them."
+>
+  <div class="wrap prose resume">
+    <header class="r-head">
+      <p class="eyebrow">// résumé</p>
+      <h1>Doron Tsur</h1>
+      <p class="role">Platform &amp; Distributed Systems Architect</p>
+      <p class="summary">
+        Platform and distributed systems engineer with 15 years building the
+        infrastructure other teams rely on: large scale search, data pipelines,
+        event driven systems, and the IaC underneath them. Works end to end:
+        architecture, the hard performance core, and the operations to run it.
+        Test driven by default. Most comfortable turning an ambiguous platform
+        problem into something other engineers can build on.
+      </p>
+      <div class="r-contact">
+        <SocialLinks />
+        <a class="btn btn--ghost" href="/contact">Get in touch</a>
+      </div>
+    </header>
+
+    <section aria-labelledby="exp">
+      <h2 id="exp">Experience</h2>
+      {
+        experience.map((role) => (
+          <div class="role-block">
+            <div class="role-row">
+              <h3>
+                {role.title} <span class="at">@ {role.org}</span>
+              </h3>
+              <span class="dates">{role.dates}</span>
+            </div>
+            {role.location && <p class="loc">{role.location}</p>}
+            <ul>
+              {role.bullets.map((b) => (
+                <li>{b}</li>
+              ))}
+            </ul>
+            {role.sub && (
+              <div class="subs">
+                {role.sub.map((s) => (
+                  <div class="sub-block">
+                    <div class="role-row">
+                      <h4>
+                        {s.title} <span class="at">@ {s.org}</span>
+                      </h4>
+                      <span class="dates">{s.dates}</span>
+                    </div>
+                    <ul>
+                      {s.bullets.map((b) => (
+                        <li>{b}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        ))
+      }
+    </section>
+
+    <section aria-labelledby="stack">
+      <h2 id="stack">Skills</h2>
+      <dl class="skills">
+        {
+          skills.map((g) => (
+            <div class="skill-group">
+              <dt>{g.group}</dt>
+              <dd>
+                <ul class="chips">
+                  {g.items.map((t) => (
+                    <li>{t}</li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <section aria-labelledby="edu">
+      <h2 id="edu">Education &amp; Languages</h2>
+      <p>
+        <strong>B.Sc, Computer Science</strong>. The Academic College of
+        Tel Aviv, Yaffo.
+      </p>
+      <p>English (native / bilingual) · Hebrew (native / bilingual).</p>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .r-head {
+    padding-top: var(--sp-12);
+  }
+  .role {
+    font-family: var(--font-mono);
+    color: var(--accent);
+    font-size: var(--fs-lg);
+    margin-top: calc(-1 * var(--sp-2));
+  }
+  .summary {
+    color: var(--text);
+  }
+  .r-contact {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-6);
+    margin-top: var(--sp-4);
+    flex-wrap: wrap;
+  }
+  .role-block {
+    padding: var(--sp-6) 0;
+    border-top: 1px solid var(--border);
+  }
+  .role-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--sp-4);
+    flex-wrap: wrap;
+  }
+  .role-block h3,
+  .sub-block h4 {
+    margin: 0;
+  }
+  .at {
+    color: var(--text-dim);
+    font-weight: 400;
+  }
+  .dates {
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+  .loc {
+    font-size: var(--fs-sm);
+    color: var(--text-dim);
+    margin: var(--sp-1) 0 0;
+  }
+  .role-block ul {
+    margin: var(--sp-3) 0 0;
+    color: var(--text);
+  }
+  .subs {
+    margin-top: var(--sp-4);
+    padding-left: var(--sp-4);
+    border-left: 2px solid var(--border);
+  }
+  .sub-block {
+    margin-bottom: var(--sp-4);
+  }
+  .sub-block h4 {
+    font-size: var(--fs-base);
+  }
+  .skills {
+    margin: var(--sp-4) 0 0;
+    display: grid;
+    gap: var(--sp-4);
+  }
+  .skill-group {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: var(--sp-4);
+    align-items: start;
+  }
+  .skill-group dt {
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+    color: var(--accent-dim);
+    padding-top: var(--sp-2);
+  }
+  .skill-group dd {
+    margin: 0;
+  }
+  @media (max-width: 560px) {
+    .skill-group {
+      grid-template-columns: 1fr;
+      gap: var(--sp-2);
+    }
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2) var(--sp-3);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .chips li {
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+    color: var(--text);
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: var(--sp-2) var(--sp-3);
+  }
+
+  /* Clean print → PDF (recruiters can print this to a tidy doc) */
+  @media print {
+    :global(body) {
+      background: #fff !important;
+      color: #111 !important;
+    }
+    :global(.site-header),
+    :global(.site-footer),
+    .r-contact {
+      display: none !important;
+    }
+    h1,
+    h2,
+    h3,
+    h4 {
+      color: #000 !important;
+    }
+    .role {
+      color: #111 !important;
+    }
+    .at,
+    .dates,
+    .loc {
+      color: #444 !important;
+    }
+    .chips li {
+      border-color: #ccc !important;
+      background: #f4f4f4 !important;
+      color: #111 !important;
+    }
+    .role-block {
+      border-color: #ddd !important;
+      break-inside: avoid;
+    }
+  }
+</style>

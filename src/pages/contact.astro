@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactForm from '../components/ContactForm.astro';
+import SocialLinks from '../components/SocialLinks.astro';
+---
+
+<BaseLayout
+  title="Contact"
+  description="Get in touch with Doron Tsur about platform, search, data or infrastructure work."
+>
+  <div class="wrap prose">
+    <p class="eyebrow">// contact</p>
+    <h1>Let's talk</h1>
+    <p class="lede">
+      Have a hard search, data, or infrastructure problem? Send a note and I'll
+      get back to you. You can also reach me on the platforms below.
+    </p>
+
+    <ContactForm />
+
+    <div class="alt">
+      <p class="prompt">locate doron</p>
+      <SocialLinks />
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .lede {
+    color: var(--text-dim);
+    max-width: 60ch;
+  }
+  .alt {
+    margin-top: var(--sp-12);
+    padding-top: var(--sp-6);
+    border-top: 1px solid var(--border);
+  }
+  .alt .prompt {
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+    color: var(--text-dim);
+    margin-bottom: var(--sp-3);
+  }
+</style>
