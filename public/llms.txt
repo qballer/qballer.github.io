@@ -26,7 +26,7 @@
 - [Talks](https://yay.dev/talks): conference talks — "TestContainers: Real
   Integration Tests Without the Pain" (NodeTLV 2025) and "Are we Deno yet?"
   (NodeTLV 2021).
-- [Blog](https://yay.dev/blog): notes on platform engineering, distributed
+- [Notes](https://yay.dev/notes): writing on platform engineering, distributed
   systems, search and data infrastructure.
 - [Contact](https://yay.dev/contact): contact form and links.
 
