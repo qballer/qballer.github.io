@@ -102,12 +102,24 @@ const isActive = (href: string) =>
     color: var(--accent);
     border-bottom-color: var(--accent);
   }
-  @media (max-width: 480px) {
+  /* Mobile: drop the prompt + path segment so the logo collapses to the
+     symbol + "yay.dev", and shrink the nav, so the header never overflows. */
+  @media (max-width: 600px) {
+    .logo {
+      font-size: var(--fs-base);
+    }
+    .logo__prompt,
+    .logo__seg {
+      display: none;
+    }
     nav ul {
-      gap: var(--sp-4);
+      gap: var(--sp-3);
+    }
+    nav a {
+      font-size: var(--fs-xs);
     }
     .bar {
-      gap: var(--sp-2);
+      gap: var(--sp-3);
     }
   }
 </style>
