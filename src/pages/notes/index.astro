@@ -11,11 +11,11 @@ const fmt = (d: Date) =>
 ---
 
 <BaseLayout
-  title="Blog"
+  title="Notes"
   description="Notes on platform engineering, distributed systems, search and data infrastructure."
 >
   <div class="wrap prose">
-    <p class="eyebrow">// blog</p>
+    <p class="eyebrow">// notes</p>
     <h1>Notes</h1>
     <p class="lede">
       Writing on platform engineering, distributed systems, search and data
@@ -37,7 +37,7 @@ const fmt = (d: Date) =>
         <ul class="post-list">
           {posts.map((post) => (
             <li>
-              <a href={`/blog/${post.id}`}>
+              <a href={`/notes/${post.id}`}>
                 <time datetime={post.data.pubDate.toISOString()}>
                   {fmt(post.data.pubDate)}
                 </time>

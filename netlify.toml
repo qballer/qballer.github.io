@@ -8,6 +8,17 @@
 [build.environment]
   NODE_VERSION = "24"
 
+# Blog was renamed to Notes; keep old URLs working.
+[[redirects]]
+  from = "/blog"
+  to = "/notes"
+  status = 301
+
+[[redirects]]
+  from = "/blog/*"
+  to = "/notes/:splat"
+  status = 301
+
 # Astro emits a 404.html; serve it on unmatched routes.
 [[redirects]]
   from = "/*"
