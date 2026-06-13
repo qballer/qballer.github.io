@@ -1,0 +1,116 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TerminalHero from '../components/TerminalHero.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+
+const services = [
+  {
+    id: '01',
+    title: 'Platform & Infrastructure',
+    items: ['AWS · ECS · Kubernetes', 'Terraform / IaC end to end', 'CI/CD, observability, on-call'],
+  },
+  {
+    id: '02',
+    title: 'Distributed Systems & Search',
+    items: ['OpenSearch / Elasticsearch at scale', 'ClickHouse, event-driven systems', 'Performance & cost tuning'],
+  },
+  {
+    id: '03',
+    title: 'Data Pipelines & CDC',
+    items: ['High throughput ingestion', 'Change data capture tooling', 'Load testing & reliability'],
+  },
+  {
+    id: '04',
+    title: 'AI Engineering',
+    items: ['LLM features into platforms', 'Retrieval & search over data', 'Pragmatic, test driven delivery'],
+  },
+];
+
+const stack = [
+  'TypeScript',
+  'Rust',
+  'Go',
+  'Python',
+  'AWS',
+  'Terraform',
+  'OpenSearch',
+  'Kubernetes',
+];
+---
+
+<BaseLayout>
+  <div class="wrap">
+    <TerminalHero />
+
+    <section aria-labelledby="services-title">
+      <p class="eyebrow">// what I do</p>
+      <h2 id="services-title">Take an ambiguous platform problem,<br />turn it into something teams can build on.</h2>
+      <div class="grid">
+        {services.map((s) => <ServiceCard {...s} />)}
+      </div>
+    </section>
+
+    <section aria-labelledby="stack-title" class="stack-section">
+      <p class="eyebrow">// stack</p>
+      <h2 id="stack-title" class="visually-hidden">Technology stack</h2>
+      <ul class="stack">
+        {stack.map((t) => <li>{t}</li>)}
+      </ul>
+    </section>
+
+    <section class="cta" aria-labelledby="cta-title">
+      <h2 id="cta-title"><span class="prompt"></span>let's work together</h2>
+      <p>
+        I run an independent platform engineering practice and partner at Codo.
+        If you have a hard search, data, or infrastructure problem, let's talk.
+      </p>
+      <a class="btn" href="/contact">Start a conversation</a>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--sp-4);
+    margin-top: var(--sp-6);
+  }
+  .stack-section {
+    margin-top: var(--sp-16);
+  }
+  .stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2) var(--sp-3);
+    list-style: none;
+    margin: var(--sp-4) 0 0;
+    padding: 0;
+  }
+  .stack li {
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+    color: var(--text);
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: var(--sp-2) var(--sp-3);
+  }
+  .cta {
+    margin-top: var(--sp-16);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-card);
+    padding: var(--sp-8);
+  }
+  .cta h2 {
+    margin-top: 0;
+  }
+  .cta p {
+    max-width: 60ch;
+    color: var(--text);
+  }
+  .cta .btn {
+    margin-top: var(--sp-2);
+  }
+</style>

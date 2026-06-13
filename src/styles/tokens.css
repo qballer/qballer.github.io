@@ -1,0 +1,50 @@
+/* Design tokens — terminal / hacker aesthetic.
+   Phosphor-green accent on a near-black base. */
+:root {
+  /* color */
+  --bg: #0a0d0c;
+  --bg-soft: #101513;
+  --bg-card: #0f1412;
+  --border: #1d2723;
+  --border-bright: #2c3a34;
+  --text: #c7d3cc;
+  --text-bright: #eaf2ee;
+  --text-dim: #7c8a83;
+  --accent: #5af78e; /* terminal green */
+  --accent-dim: #2ea043;
+  --accent-glow: rgba(90, 247, 142, 0.15);
+  --danger: #f78a5a;
+
+  /* type */
+  --font-mono: ui-monospace, "JetBrains Mono", "Cascadia Code", "SF Mono",
+    "Menlo", "Consolas", monospace;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+
+  --fs-xs: 0.78rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-lg: 1.2rem;
+  --fs-xl: 1.6rem;
+  --fs-2xl: 2.2rem;
+  --fs-3xl: clamp(2.2rem, 6vw, 3.6rem);
+
+  /* space */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-6: 1.5rem;
+  --sp-8: 2rem;
+  --sp-12: 3rem;
+  --sp-16: 4rem;
+  --sp-24: 6rem;
+
+  /* layout */
+  --maxw: 960px;
+  --maxw-prose: 700px;
+  --radius: 8px;
+  --radius-sm: 5px;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}

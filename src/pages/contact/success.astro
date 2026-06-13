@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Message sent" noindex={true}>
+  <div class="wrap prose center">
+    <p class="eyebrow">// message sent</p>
+    <h1>Message sent ✓</h1>
+    <p>Thanks, your message is in. I'll get back to you soon.</p>
+    <p><a class="btn btn--ghost" href="/">← back home</a></p>
+  </div>
+</BaseLayout>
+
+<style>
+  .center {
+    padding-top: var(--sp-16);
+  }
+</style>

@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="404 · not found" noindex={true}>
+  <div class="wrap prose center">
+    <p class="eyebrow">// error</p>
+    <h1>404</h1>
+    <p class="prompt">cat {Astro.url.pathname}</p>
+    <p>No such file or directory.</p>
+    <p><a class="btn btn--ghost" href="/">← back home</a></p>
+  </div>
+</BaseLayout>
+
+<style>
+  .center {
+    padding-top: var(--sp-16);
+  }
+  .center .prompt {
+    font-family: var(--font-mono);
+    color: var(--text-dim);
+  }
+</style>

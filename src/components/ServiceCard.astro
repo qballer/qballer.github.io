@@ -1,0 +1,65 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  items: string[];
+}
+const { id, title, items } = Astro.props;
+---
+
+<article class="card">
+  <header class="card__head">
+    <span class="card__id">{id}</span>
+    <h3>{title}</h3>
+  </header>
+  <ul>
+    {items.map((i) => <li>{i}</li>)}
+  </ul>
+</article>
+
+<style>
+  .card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-card);
+    padding: var(--sp-6);
+    transition: border-color 0.2s var(--ease), transform 0.2s var(--ease);
+  }
+  .card:hover {
+    border-color: var(--border-bright);
+    transform: translateY(-3px);
+  }
+  .card__head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--sp-3);
+    margin-bottom: var(--sp-3);
+  }
+  .card__id {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--accent-dim);
+  }
+  .card h3 {
+    margin: 0;
+    font-size: var(--fs-lg);
+  }
+  .card ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .card li {
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+    color: var(--text-dim);
+    padding-left: 1.1em;
+    position: relative;
+  }
+  .card li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--accent-dim);
+  }
+</style>
