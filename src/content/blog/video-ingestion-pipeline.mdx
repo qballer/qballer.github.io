@@ -72,6 +72,16 @@ canonicalURL: "https://www.codo.tech/blog/how-we-built-a-video-ingestion-pipelin
   .vi-byline a { color:var(--text,#c4d2e1); border-bottom:1px solid transparent; }
   .vi-byline a:hover { color:var(--accent,#faca2b); border-bottom-color:var(--accent,#faca2b); }
   @media (prefers-reduced-motion: reduce) { .vi-scope .trace, .vi-scope .trace2 { animation:none; stroke-dashoffset:0; } .vi-scope .tip { animation:none; opacity:1; } }
+
+  /* editorial touches (echoing the codo original), scoped to this post */
+  .post .body h2 { position:relative; }
+  .post .body h2::before { content:""; display:block; width:26px; height:2px; background:var(--accent,#faca2b); margin-bottom:16px; }
+  .post .body > p:first-of-type::first-letter,
+  .post .body h2 + p::first-letter {
+    float:left; font-family:var(--font-mono,monospace); font-weight:700;
+    font-size:3.1em; line-height:.7; padding:.06em .16em 0 0;
+    color:var(--accent,#faca2b);
+  }
 `}</style>
 
 <div class="vi vi-hero">
