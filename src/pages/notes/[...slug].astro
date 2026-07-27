@@ -33,6 +33,15 @@ const fmt = (d: Date) =>
         )
       }
     </p>
+    {
+      post.data.tags.length > 0 && (
+        <ul class="tags" aria-label="tags">
+          {post.data.tags.map((t) => (
+            <li>{t}</li>
+          ))}
+        </ul>
+      )
+    }
     <div class="body">
       <Content />
     </div>
@@ -48,6 +57,24 @@ const fmt = (d: Date) =>
     font-size: var(--fs-sm);
     color: var(--text-dim);
     margin-top: calc(-1 * var(--sp-2));
+  }
+  .tags {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2) var(--sp-3);
+    padding: 0;
+    margin: var(--sp-3) 0 0;
+  }
+  .tags li {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.15em 0.6em;
+    margin: 0;
   }
   .body {
     margin-top: var(--sp-8);
