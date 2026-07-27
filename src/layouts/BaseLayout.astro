@@ -11,8 +11,9 @@ interface Props {
   image?: string;
   type?: 'website' | 'article';
   noindex?: boolean;
+  canonicalUrl?: string;
 }
-const { title, description, image, type, noindex } = Astro.props;
+const { title, description, image, type, noindex, canonicalUrl } = Astro.props;
 
 // Structured data — helps search engines and LLMs resolve the entity (who
 // Doron is, what he knows, where else he is online) and cite it confidently.
@@ -71,7 +72,7 @@ const structuredData = {
 <!doctype html>
 <html lang={SITE.locale}>
   <head>
-    <Seo {title} {description} {image} {type} {noindex} />
+    <Seo {title} {description} {image} {type} {noindex} canonicalUrl={canonicalUrl} />
     <script
       type="application/ld+json"
       set:html={JSON.stringify(structuredData)}
