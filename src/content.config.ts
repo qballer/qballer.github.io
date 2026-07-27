@@ -11,6 +11,9 @@ const blog = defineCollection({
     updatedDate: z.coerce.date().optional(),
     draft: z.boolean().default(false),
     tags: z.array(z.string()).default([]),
+    // Cross-posts: point the canonical link at the original so search engines
+    // credit the source, not this copy.
+    canonicalURL: z.string().url().optional(),
   }),
 });
 

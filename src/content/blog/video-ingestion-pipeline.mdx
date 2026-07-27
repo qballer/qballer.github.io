@@ -1,0 +1,427 @@
+---
+title: "How we built a video ingestion pipeline for 60× scale headroom"
+description: "Building a high-volume video ingestion system for a scale target that refused to hold still, and the three times it pushed back and taught us something."
+pubDate: 2026-07-27
+draft: false
+tags:
+  - "Distributed Systems"
+  - "AWS"
+  - "OpenSearch"
+  - "Scale"
+  - "GPU"
+  - "Language Models"
+canonicalURL: "https://www.codo.tech/blog/how-we-built-a-video-ingestion-pipeline-for-60x-scale-headroom/"
+---
+
+<style>{`
+  .vi {
+    --flow:#faca2b; --accent:#4c8df9; --crit:#ee3923;
+    --ink:#eef4fb; --ink-2:#c4d2e1; --muted:#7e93a9;
+    --hairline:rgba(255,255,255,0.12); --hairline-2:rgba(255,255,255,0.26);
+    --surface:#102134; --surface-2:#21384f; --ground:#0b1a2b;
+    margin:36px 0;
+  }
+  .vi svg { display:block; }
+  .vi svg text { font-family:var(--font-mono,monospace); fill:var(--ink-2); }
+  .vi .nlabel { font-size:12px; fill:var(--ink); font-weight:600; }
+  .vi .elabel { font-size:10.5px; fill:var(--muted); }
+  .vi .node rect { fill:var(--surface); stroke:var(--hairline-2); stroke-width:1.4; }
+  .vi .node.accent rect { stroke:var(--flow); fill:color-mix(in srgb, var(--flow) 12%, var(--surface)); }
+  .vi .node.crit rect { stroke:var(--crit); }
+  .vi .edge { stroke:var(--hairline-2); stroke-width:1.6; fill:none; }
+  .vi .edge.hot { stroke:var(--accent); }
+  .vi .edge.qe { stroke:var(--flow); stroke-width:1.8; marker-end:url(#arrowq); }
+  .vi .edge.dash { stroke-dasharray:5 4; }
+  .vi .sns-c { fill:var(--ground); stroke:var(--flow); stroke-width:1.5; }
+  .vi .sns-l { font-size:9px; font-weight:700; fill:var(--flow); }
+  .vi .qcap { font-size:9.5px; fill:var(--flow); }
+  .vi .grid line { stroke:var(--hairline); }
+  .vi .panel { border:1px solid var(--hairline); border-radius:12px; background:rgba(255,255,255,0.02); overflow:hidden; }
+  .vi .panel-head { padding:.6rem 1rem; border-bottom:1px solid var(--hairline); font-family:var(--font-mono,monospace); font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); display:flex; align-items:center; gap:.5rem; }
+  .vi .panel-head .lamp { width:8px; height:8px; border-radius:50%; background:var(--flow); display:inline-block; }
+  .vi .panel-head .lamp.crit { background:var(--crit); }
+  .vi .panel-body { padding:1rem; }
+  .vi figcaption { font-family:var(--font-mono,monospace); font-size:12.5px; color:var(--muted); line-height:1.55; margin-top:12px; text-align:center; }
+  .vi figcaption b { color:var(--ink-2); }
+  .vi-life { display:flex; flex-wrap:wrap; gap:.5rem; margin:28px 0; }
+  .vi-life .step { flex:1 1 130px; background:rgba(255,255,255,0.02); border:1px solid var(--hairline); border-radius:10px; padding:.8rem; }
+  .vi-life .t { font-family:var(--font-mono,monospace); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:#faca2b; min-height:.9em; }
+  .vi-life .s { font-family:var(--font-sans,sans-serif); font-weight:700; font-size:15px; color:#eef4fb; margin-top:.15rem; }
+  .vi-life .d { font-family:var(--font-mono,monospace); font-size:11px; color:#7e93a9; margin-top:.35rem; line-height:1.45; }
+  .vi-mini { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.10); overflow:hidden; margin:32px 0; }
+  .vi-mini > div { background:#0b1a2b; padding:1.1rem 1rem; }
+  .vi-mini .n { font-family:var(--font-mono,monospace); font-weight:700; font-size:24px; color:#faca2b; white-space:nowrap; }
+  .vi-mini .l { font-family:var(--font-mono,monospace); font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:#7e93a9; margin-top:.5rem; line-height:1.35; }
+  @media (max-width:640px){ .vi-mini { grid-template-columns:repeat(2,1fr); } .vi-mini .n { white-space:normal; } }
+  .vi-log { font-family:var(--font-mono,monospace); font-size:13px; color:#c4d2e1; background:rgba(255,255,255,0.03); border-left:3px solid #ee3923; border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:28px 0; line-height:1.6; }
+  .vi-log.ok { border-left-color:#faca2b; }
+  .vi-log b { color:#ee3923; }
+  .vi-log.ok b { color:#faca2b; }
+  .vi-bio { margin-top:56px; padding-top:24px; border-top:1px solid rgba(255,255,255,0.08); font-family:var(--font-mono,monospace); font-size:13px; line-height:1.65; color:#7e93a9; }
+  @media (max-width:560px){ .vi-mini { grid-template-columns:repeat(2,1fr); } }
+  @media (min-width:1024px){ .vi { position:relative; left:50%; transform:translateX(-50%); width:min(920px,92vw); } }
+
+  .vi-scope { width:100%; height:120px; display:block; margin-top:6px; }
+  .vi-scope .grid { stroke:rgba(255,255,255,0.08); stroke-width:1; }
+  .vi-scope .trace { fill:none; stroke:var(--accent,#faca2b); stroke-width:2; stroke-dasharray:1400; stroke-dashoffset:1400; animation:vi-draw 3.2s ease-out .2s forwards; }
+  .vi-scope .trace2 { fill:none; stroke:#ff5a0b; stroke-width:1.7; opacity:.7; stroke-dasharray:1400; stroke-dashoffset:1400; animation:vi-draw 3.2s ease-out .6s forwards; }
+  .vi-scope .tip { fill:var(--accent,#faca2b); opacity:0; animation:vi-pop .01s linear 3.2s forwards; }
+  @keyframes vi-draw { to { stroke-dashoffset:0; } }
+  @keyframes vi-pop { to { opacity:1; } }
+  .vi-byline { font-family:var(--font-mono,monospace); font-size:.8rem; color:var(--text-dim,#7e93a9); letter-spacing:.02em; margin:16px 0 0; display:flex; flex-wrap:wrap; gap:.4rem .9rem; align-items:center; }
+  .vi-byline a { color:var(--text,#c4d2e1); border-bottom:1px solid transparent; }
+  .vi-byline a:hover { color:var(--accent,#faca2b); border-bottom-color:var(--accent,#faca2b); }
+  @media (prefers-reduced-motion: reduce) { .vi-scope .trace, .vi-scope .trace2 { animation:none; stroke-dashoffset:0; } .vi-scope .tip { animation:none; opacity:1; } }
+
+  /* editorial touches (echoing the codo original), scoped to this post */
+  .post .body h2 { position:relative; }
+  .post .body h2::before { content:""; display:block; width:26px; height:2px; background:var(--accent,#faca2b); margin-bottom:16px; }
+  .post .body > p:first-of-type::first-letter,
+  .post .body h2 + p::first-letter {
+    float:left; font-family:var(--font-mono,monospace); font-weight:700;
+    font-size:3.1em; line-height:.7; padding:.06em .16em 0 0;
+    color:var(--accent,#faca2b);
+  }
+
+  /* give the article more room + larger body text (this post only) */
+  .wrap.post { max-width: 880px; }
+  .post .body p,
+  .post .body li,
+  .post .body ul,
+  .post .body ol { font-size: 1.12rem; line-height: 1.72; }
+`}</style>
+
+<div class="vi vi-hero">
+  <svg class="vi-scope" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
+    <g class="grid">
+      <line x1="0" y1="30" x2="1200" y2="30"/><line x1="0" y1="60" x2="1200" y2="60"/><line x1="0" y1="90" x2="1200" y2="90"/>
+    </g>
+    <path class="trace2" d="M0,80 C120,80 160,40 260,45 C360,50 400,95 520,90 C640,85 680,25 820,35 C960,45 1000,88 1120,70 L1200,72"/>
+    <path class="trace" d="M0,90 C100,90 140,20 240,60 C320,92 360,55 460,58 C580,62 600,15 720,52 C840,88 900,40 1020,48 C1100,54 1160,72 1200,40"/>
+    <circle class="tip" cx="1200" cy="40" r="4"/>
+  </svg>
+  <p class="vi-byline">by <a href="https://www.linkedin.com/in/doron-tsur">Doron Tsur</a> <span>·</span> <a href="https://www.codo.tech/blog/how-we-built-a-video-ingestion-pipeline-for-60x-scale-headroom/">originally on codo.tech</a> <span>·</span> ~15 min read</p>
+</div>
+
+
+<div class="vi vi-mini">
+<div><div class="n">0.5 to 2M</div><div class="l">Items a day, in production</div></div>
+<div><div class="n">~30M/day</div><div class="l">Designed &amp; load-tested for</div></div>
+<div><div class="n">~5 min</div><div class="l">Publish to searchable</div></div>
+<div><div class="n">0</div><div class="l">Mocks, across ~550 tests</div></div>
+</div>
+
+Most systems are built for the load they have. This one had to be built for a load nobody could name yet. When we started, the target was "around 30 million items a day." By the time we were in production it had been re-baselined to 2 million, with the 30M number still standing as the direction of travel. Somewhere in that range was the real system, and we had to build something that didn't need rewriting when the number moved.
+
+This is a note on how we did it: the architecture, the decisions that created the headroom, how we knew it worked, and three moments where the system pushed back. We were a small mixed team, a couple of platform consultants plus the client's own engineers. Everything below is "we"; the hindsight at the end is mine.
+
+The domain, in one line: ingest high-volume public video content from across the open web, enrich it (metadata, downloaded media, machine transcription), index it, and expose search over it.
+
+## What we were building
+
+The job was a **searchable, near-real-time index of public video**: not a crawl-once dataset but a continuously updating one. As videos are published across the open web, the system finds each one within seconds, downloads the video and pulls its metadata, works out whether anyone is speaking and in what language, transcribes the speech to text, and makes the whole record (caption, transcript, metadata) searchable within about five minutes of the video going live. A user can then query "show me recent videos that mention X" and get answers off a corpus that's minutes old.
+
+Three forces pull against each other the entire time: **volume** (a firehose that could reach tens of millions of new items a day), **freshness** (minutes, not hours), and a **scope that kept moving** as the product found its shape. Almost every decision below is about holding those three in tension, so that when one of them changes (the volume target changed by more than an order of magnitude mid-project) the design bends instead of breaking. And the volume was a guess. We were building for a number nobody could pin down, which is a different problem from building for a big one.
+
+<div class="vi vi-life">
+<div class="step"><div class="t">t = 0</div><div class="s">Published</div><div class="d">a new video goes live on the open web</div></div>
+<div class="step"><div class="t">+ seconds</div><div class="s">Discovered</div><div class="d">we confirm a real, live video actually exists</div></div>
+<div class="step"><div class="t"></div><div class="s">Fetched</div><div class="d">download the video to storage; look up its metadata</div></div>
+<div class="step"><div class="t"></div><div class="s">Language-detected</div><div class="d">is there speech, and in which language?</div></div>
+<div class="step"><div class="t"></div><div class="s">Transcribed</div><div class="d">speech becomes text, per language</div></div>
+<div class="step"><div class="t">≈ 5 min</div><div class="s">Searchable</div><div class="d">indexed and queryable through the API</div></div>
+</div>
+
+## Six stages, no shared state, queues in between
+
+The pipeline is six stages joined by queues: **discover → fetch → detect-language → transcribe → index → search.** Each stage is its own service (containers on ECS/EC2) with its own input queue and its own autoscaling policy, and it knows nothing about its neighbours beyond a message schema. Services physically can't import each other's code; a build rule fails the compile if they try. That reads like a style rule; it's the decision everything else depends on. Because the only coupling between stages is a queue, each one scales on its own backlog and a slow stage becomes a growing queue rather than an outage propagating upstream.
+
+<figure class="vi">
+<div class="panel">
+<div class="panel-head"><span class="lamp"></span> architecture · every service seam is a queue</div>
+<div class="panel-body">
+<svg viewBox="0 0 800 480" width="100%" role="img" aria-label="Every service-to-service hop is an SNS topic feeding an SQS queue. The orchestrator writes an assignments queue to the workers; workers publish discovered items through an SNS topic and SQS queue into the fetcher; the fetcher shares egress infrastructure with the workers to reach the open web, writes media to an object store, looks up metadata over HTTP, and publishes one MediaFetched topic that fans out to two queues, one to the indexer and one to the audio service; the audio service fans out per-language queues to the transcribers and a detection result to the indexer; transcribers publish transcripts to the indexer; the indexer writes the search index which the search API reads.">
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="rgba(255,255,255,0.26)"/></marker>
+<marker id="arrowq" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#faca2b"/></marker>
+<marker id="arrowhot" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#4c8df9"/></marker>
+<symbol id="sqs" viewBox="0 0 28 20"><rect x="1" y="1" width="26" height="18" rx="4" fill="#0b1a2b" stroke="#faca2b" stroke-width="1.4"/><line x1="6" y1="7" x2="22" y2="7" stroke="#faca2b" stroke-width="1.5"/><line x1="6" y1="10.5" x2="22" y2="10.5" stroke="#faca2b" stroke-width="1.5"/><line x1="6" y1="14" x2="22" y2="14" stroke="#faca2b" stroke-width="1.5"/></symbol>
+</defs>
+<g class="node"><rect x="24" y="34" width="120" height="46" rx="10"/><text class="nlabel" x="84" y="61" text-anchor="middle">Orchestrator</text></g>
+<path class="edge qe" marker-end="url(#arrowq)" d="M144,57 L166,57"/>
+<use href="#sqs" x="168" y="47" width="28" height="20"/>
+<text class="qcap" x="182" y="30" text-anchor="middle">assignments</text>
+<path class="edge qe" marker-end="url(#arrowq)" d="M196,57 L222,57"/>
+<g class="node"><rect x="224" y="34" width="116" height="46" rx="10"/><text class="nlabel" x="282" y="61" text-anchor="middle">Workers</text></g>
+<g class="node accent"><rect x="430" y="26" width="120" height="46" rx="10"/><text class="nlabel" x="490" y="47" text-anchor="middle">Shared egress</text><text class="elabel" x="490" y="62" text-anchor="middle">infrastructure</text></g>
+<g class="node"><rect x="600" y="26" width="150" height="46" rx="10"/><text class="nlabel" x="675" y="53" text-anchor="middle">The open web</text></g>
+<path class="edge hot dash" marker-end="url(#arrowhot)" d="M340,50 C380,46 400,46 428,47"/>
+<path class="edge hot dash" marker-end="url(#arrowhot)" d="M550,49 L598,49"/>
+<path class="edge qe" marker-end="url(#arrowq)" d="M282,80 L282,88"/>
+<circle class="sns-c" cx="282" cy="99" r="11"/><text class="sns-l" x="282" y="102" text-anchor="middle">SNS</text>
+<path class="edge qe" marker-end="url(#arrowq)" d="M282,110 L282,114"/>
+<use href="#sqs" x="268" y="114" width="28" height="20"/>
+<text class="qcap" x="303" y="128" text-anchor="start">discovered</text>
+<path class="edge qe" marker-end="url(#arrowq)" d="M282,134 L282,150"/>
+<g class="node"><rect x="224" y="150" width="116" height="48" rx="10"/><text class="nlabel" x="282" y="178" text-anchor="middle">Fetcher</text></g>
+<g class="node"><rect x="24" y="150" width="120" height="48" rx="10"/><text class="nlabel" x="84" y="178" text-anchor="middle">Object store</text></g>
+<path class="edge dash" marker-end="url(#arrow)" d="M224,176 L146,176"/><text class="elabel" x="184" y="169" text-anchor="middle">media</text>
+<g class="node"><rect x="600" y="150" width="150" height="48" rx="10"/><text class="nlabel" x="675" y="178" text-anchor="middle">Metadata API</text></g>
+<path class="edge dash" marker-end="url(#arrow)" d="M340,182 C470,196 540,184 598,178"/><text class="elabel" x="470" y="200" text-anchor="middle">lookup</text>
+<path class="edge hot dash" marker-end="url(#arrowhot)" d="M332,150 C400,110 430,86 466,74"/><text class="elabel" x="432" y="100" text-anchor="middle">download</text>
+<circle class="sns-c" cx="400" cy="236" r="14"/><text class="sns-l" x="400" y="239" text-anchor="middle">SNS</text>
+<text class="qcap" x="400" y="212" text-anchor="middle">MediaFetched</text>
+<path class="edge qe" marker-end="url(#arrowq)" d="M318,198 C350,214 372,224 387,230"/>
+<use href="#sqs" x="300" y="286" width="28" height="20"/><text class="qcap" x="314" y="282" text-anchor="middle">metadata</text>
+<path class="edge qe" d="M392,247 C356,268 332,278 318,286"/>
+<path class="edge qe" marker-end="url(#arrowq)" d="M312,306 C306,324 302,336 300,350"/>
+<use href="#sqs" x="486" y="250" width="28" height="20"/><text class="qcap" x="500" y="246" text-anchor="middle">audio</text>
+<path class="edge qe" d="M413,232 C448,238 470,246 486,254"/>
+<path class="edge qe" marker-end="url(#arrowq)" d="M500,270 C503,282 504,292 505,300"/>
+<g class="node"><rect x="430" y="300" width="150" height="52" rx="10"/><text class="nlabel" x="505" y="322" text-anchor="middle">Audio service</text><text class="elabel" x="505" y="339" text-anchor="middle">language detection</text></g>
+<g class="node"><rect x="662" y="300" width="138" height="52" rx="10"/><text class="nlabel" x="731" y="322" text-anchor="middle">Transcribers</text><text class="elabel" x="731" y="339" text-anchor="middle">per language</text></g>
+<path class="edge qe" d="M580,326 L590,326"/>
+<circle class="sns-c" cx="600" cy="326" r="9"/><text class="sns-l" x="600" y="329" text-anchor="middle" font-size="7">SNS</text>
+<use href="#sqs" x="616" y="316" width="26" height="19"/>
+<path class="edge qe" marker-end="url(#arrowq)" d="M642,326 L660,326"/>
+<text class="qcap" x="615" y="294" text-anchor="middle">per-language</text>
+<g class="node accent"><rect x="224" y="352" width="150" height="56" rx="10"/><text class="nlabel" x="299" y="376" text-anchor="middle">Indexer</text><text class="elabel" x="299" y="393" text-anchor="middle">3 producers → 1 doc</text></g>
+<use href="#sqs" x="410" y="360" width="28" height="20"/><text class="qcap" x="424" y="356" text-anchor="middle">detection</text>
+<path class="edge qe" d="M488,352 C460,362 448,368 438,370"/>
+<path class="edge qe" marker-end="url(#arrowq)" d="M410,373 C396,377 388,378 376,378"/>
+<use href="#sqs" x="548" y="384" width="28" height="20"/><text class="qcap" x="562" y="418" text-anchor="middle">transcript</text>
+<path class="edge qe" d="M720,352 C650,384 606,392 578,394"/>
+<path class="edge qe" marker-end="url(#arrowq)" d="M548,394 C470,404 420,392 376,388"/>
+<g class="node"><rect x="24" y="352" width="120" height="56" rx="10"/><text class="nlabel" x="84" y="384" text-anchor="middle">Search index</text></g>
+<path class="edge" marker-end="url(#arrow)" d="M224,380 L146,380"/><text class="elabel" x="185" y="373" text-anchor="middle">write</text>
+<g class="node"><rect x="24" y="272" width="120" height="46" rx="10"/><text class="nlabel" x="84" y="299" text-anchor="middle">Search API</text></g>
+<path class="edge dash" marker-end="url(#arrow)" d="M84,352 L84,320"/><text class="elabel" x="102" y="338" text-anchor="start">read</text>
+<line x1="24" y1="452" x2="776" y2="452" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+<use href="#sqs" x="40" y="462" width="26" height="18"/>
+<text class="elabel" x="72" y="475" text-anchor="start">SQS queue · buffer · DLQ</text>
+<circle class="sns-c" cx="316" cy="470" r="9"/><text class="sns-l" x="316" y="473" text-anchor="middle" font-size="7">SNS</text>
+<text class="elabel" x="332" y="475" text-anchor="start">SNS topic · fan-out</text>
+<line x1="500" y1="470" x2="530" y2="470" stroke="#4c8df9" stroke-width="1.6" stroke-dasharray="5 4"/>
+<text class="elabel" x="536" y="475" text-anchor="start">direct call · HTTP / storage</text>
+</svg>
+</div>
+</div>
+<figcaption><b>Every service-to-service hop is an SNS topic feeding an SQS queue</b> (amber). That's the decoupling: a slow consumer just grows a backlog, and each queue carries a dead-letter queue and its own autoscaling signal. The fetcher publishes <b>one topic that fans out to two queues</b> (indexer + audio). Direct HTTP/storage calls are dashed grey. Workers and fetcher share the same <b>egress infrastructure</b> out to the open web.</figcaption>
+</figure>
+
+Stages talk through queues fed by fan-out topics, so a producer can add consumers without knowing they exist. Message schemas are versioned as discriminated unions, so two versions can coexist on a queue during a rolling deploy. Autoscaling is driven off **queue depth**, not CPU. The honest signal for a pipeline is how much work is waiting, and CPU-based scaling lags it badly.
+
+We chose managed queues over a streaming log and containers-on-VMs over Kubernetes. The language call was a real bake-off: a colleague wrote the scanner in Go, I wrote it in Node. Go came out about 15% faster on the hot path. We shipped Node anyway. Our stack is Node, and a 15% edge on one service didn't justify carrying a second language. Every one of these was a "smaller team, fewer moving parts" call.
+
+## Where the headroom comes from
+
+Four decisions carry the headroom, and none of them is "add more machines." That part is easy once the design lets you.
+
+### One coverage knob, independent of fleet size
+
+Ingestion volume is governed by a single configuration value that sets how much of the available stream we take in, read live each cycle, held completely separate from how many workers run. One knob is coverage, fleet size is speed; they're orthogonal. Moving between operating points is one value changed live: no redeploy, no effect on in-flight work. That single indirection is most of why the scale target could move without the architecture moving with it.
+
+### Idempotency, so retries are free
+
+Two properties make retries safe end to end. First, the discovery→fetch hop runs on FIFO queues keyed per video for both grouping and deduplication, so a duplicate discovery inside the window is collapsed before anyone pays to fetch it. Second, as the diagram shows, the indexer's document is assembled by three producers arriving in any order, any number of times. So writes are scripted upserts keyed to the same document, with nulls stripped so a late partial can't clobber a field that's already there:
+
+```jsonc
+POST content_index/_update/{id}
+{
+  "scripted_upsert": true,
+  "script": { "source":
+    "for (e in params.doc.entrySet()) if (e.value != null) ctx._source[e.key] = e.value" },
+  "upsert": {},
+  "retry_on_conflict": 3          // concurrent same-id writes converge
+}
+```
+
+Create-then-merge and merge-then-create converge to byte-identical documents. Once every write is order-independent and replay-safe, you can retry aggressively, and aggressive retries are what let the pipeline ride out a flaky upstream instead of dropping data.
+
+### Backpressure, with a deliberate hole in it
+
+Between fetch, audio, transcription and index, a queue absorbs every rate mismatch. Long units of work keep their lock alive with a visibility heartbeat that re-extends at a third of the timeout, and interrupted work is *never* deleted; a shutdown mid-unit just lets the message redeliver. But discovery is deliberately *not* back-pressured by downstream: if it falls too far behind real time, it advances its cursor and sheds the backlog rather than queue work that's already going stale. For a freshness product, current-but-incomplete beats complete-but-late. We picked which property to protect, on purpose.
+
+### Failure isolation as a default
+
+Every queue has a dead-letter queue at three attempts. Every service but the orchestrator is stateless and disposable. The services themselves own almost no durable state; the one exception is a small cursor record, and everything heavy lives in the object store and the search cluster, which are built to be stateful. The CPU-bound stages run competing-consumer worker pools (N loops each doing pull-one, process, repeat) instead of pulling a batch and awaiting it, so one slow item can't stall the nine behind it. When something breaks, it breaks in one lane.
+
+One thing worth saying plainly, because it took us a while to accept: the ceiling was never the scanning. Scanning compute you scale by adding tasks. The real limit is the shared egress out to the open web. That's finite in a way compute isn't, and every scaling conversation came back to it.
+
+<figure class="vi">
+<div class="panel">
+<div class="panel-head"><span class="lamp"></span> operating band vs. designed headroom · items/day (log scale)</div>
+<div class="panel-body">
+<svg viewBox="0 0 900 150" width="100%" role="img" aria-label="Log-scale range: operating band roughly 0.5 to 2 million items per day; designed and load-tested headroom to about 30 million per day.">
+<g class="grid"><line x1="60" y1="20" x2="60" y2="110"/><line x1="320" y1="20" x2="320" y2="110"/><line x1="580" y1="20" x2="580" y2="110"/><line x1="840" y1="20" x2="840" y2="110"/></g>
+<g fill="#7e93a9" font-size="11" font-family="var(--font-mono,monospace)"><text x="60" y="128" text-anchor="middle">100K</text><text x="320" y="128" text-anchor="middle">1M</text><text x="580" y="128" text-anchor="middle">10M</text><text x="840" y="128" text-anchor="middle">100M</text></g>
+<rect x="60" y="52" width="720" height="12" rx="6" fill="#21384f"/>
+<rect x="242" y="48" width="168" height="20" rx="10" fill="#faca2b" opacity=".9"/>
+<text x="326" y="40" text-anchor="middle" font-size="11.5" font-weight="700" style="fill:#faca2b" font-family="var(--font-mono,monospace)">operating · 0.5 to 2M</text>
+<circle cx="684" cy="58" r="9" fill="#4c8df9"/>
+<text x="684" y="40" text-anchor="middle" font-size="11.5" font-weight="700" style="fill:#4c8df9" font-family="var(--font-mono,monospace)">target · ~30M</text>
+<path d="M410,58 L672,58" stroke="#4c8df9" stroke-width="2" stroke-dasharray="4 4"/>
+</svg>
+</div>
+</div>
+<figcaption>We ran in the <b>0.5 to 2M/day</b> band, with validated bursts at ~1.4M/day pace, and load-tested the path toward <b>~30M/day</b>: a 60× span from the floor of where we ran to the ceiling we designed for. We never ran at peak; we validated it was reachable.</figcaption>
+</figure>
+
+## Tested against the real thing
+
+A pipeline that fans out across six services and three storage systems can't be verified by unit tests that mock their way around the hard parts. So we didn't mock. Across roughly **550 test cases**, `vi.fn`, `vi.mock` and `vi.spyOn` appear **zero times**; the rule is enforced, not aspirational. Verification is built from the outside in.
+
+<div class="vi vi-mini">
+<div><div class="n">~550</div><div class="l">Test cases</div></div>
+<div><div class="n">~180</div><div class="l">Run against real infra</div></div>
+<div><div class="n">0</div><div class="l">Mocks, stubs, spies</div></div>
+<div><div class="n">~2,900</div><div class="l">Lines of design doc</div></div>
+</div>
+
+The safety net that matters is the tests that stand up the real thing in containers: real message queues, a real object store, a real search cluster, and the actual service Docker images, not test doubles. About **180 tests run this way**, of which the heaviest 30-odd are full end-to-end system tests, backed by a dedicated internal package whose only job is a container factory per service. The search acceptance test seeds a synthetic corpus into the queue, runs the *real indexer image* to apply the schema, boots the *real indexer service* to consume and write into a *real search cluster*, then queries the API over HTTP and asserts the result. It was written *before* the search service existed; its own header calls it "the test that guides the service: RED until the service is built inward." The acceptance test was the specification.
+
+<figure class="vi">
+<div class="panel">
+<div class="panel-head"><span class="lamp"></span> what one system test boots</div>
+<div class="panel-body">
+<svg viewBox="0 0 900 150" width="100%" role="img" aria-label="A system test boots a synthetic corpus into a real queue, a real indexer image, a real search cluster and object store, then queries the real API over HTTP.">
+<defs><marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="rgba(255,255,255,0.26)"/></marker></defs>
+<g class="node"><rect x="10" y="55" width="120" height="46" rx="10"/><text class="nlabel" x="70" y="76" text-anchor="middle">Synthetic</text><text class="elabel" x="70" y="91" text-anchor="middle">corpus</text></g>
+<g class="node accent"><rect x="180" y="55" width="110" height="46" rx="10"/><text class="nlabel" x="235" y="82" text-anchor="middle">Real queue</text></g>
+<g class="node accent"><rect x="340" y="55" width="120" height="46" rx="10"/><text class="nlabel" x="400" y="76" text-anchor="middle">Real indexer</text><text class="elabel" x="400" y="91" text-anchor="middle">(service image)</text></g>
+<g class="node accent"><rect x="510" y="55" width="130" height="46" rx="10"/><text class="nlabel" x="575" y="76" text-anchor="middle">Real search</text><text class="elabel" x="575" y="91" text-anchor="middle">cluster</text></g>
+<g class="node"><rect x="690" y="55" width="120" height="46" rx="10"/><text class="nlabel" x="750" y="76" text-anchor="middle">API over</text><text class="elabel" x="750" y="91" text-anchor="middle">HTTP · assert</text></g>
+<path class="edge" marker-end="url(#arr2)" d="M130,78 L178,78"/>
+<path class="edge" marker-end="url(#arr2)" d="M290,78 L338,78"/>
+<path class="edge" marker-end="url(#arr2)" d="M460,78 L508,78"/>
+<path class="edge" marker-end="url(#arr2)" d="M640,78 L688,78"/>
+<text x="235" y="128" text-anchor="middle" class="elabel">no mocks · real infrastructure in containers</text>
+</svg>
+</div>
+</div>
+<figcaption>The acceptance test is the specification. It boots the real dependencies, so it fails on the bugs that happen, not the ones a stub was told to simulate.</figcaption>
+</figure>
+
+Two habits sat on either side of that net. Every service began as a **design doc committed to the repo** (roughly 2,900 lines of them across system design, capacity model, index mapping and the search contract), reviewed and "signed" on a fixed four-phase rhythm (design, review, PR plan, implement) before a line of service code, then built as a dependency-ordered sequence of PRs rather than discovered in the editor.
+
+And we **validated against real data, not just synthetic fixtures**. We ran the actual mapping code across a real staging dump to measure things you can't guess. That corrected a vendor's 50 KB-per-document cluster-sizing assumption down to a measured ~2 KB, which changed the hardware. A field-presence audit over a couple thousand real records shaped the index mapping and exposed two schema bugs (a field that was a string where we'd typed a number; a duration in milliseconds we'd read as seconds). And we checked search correctness by planting a known set of real posts and comparing results side-by-side against a reference store, where they diverged became tickets, not opinions.
+
+> The acceptance test came first. Building the service was making it go green.
+
+## What the system taught us the hard way
+
+### 01 · Scaling wall (discovery) · The circuit breaker that synchronised the fleet
+
+We wrapped the discovery worker's outbound validation call in a circuit breaker, the textbook move, tuned conservatively: trip after five requests at a 50% error rate, reset after thirty seconds. What the textbook omits is that our workers shared one pool of egress infrastructure. When it degraded, every worker's breaker saw the same failure rate and tripped in the same second. On open, our handler *aborted the whole assignment*. The abort returned the message to the queue; the next worker leased it, hit the same degraded dependency, aborted again, and on the third receive it dead-lettered.
+
+<div class="vi-log"><b>[incident]</b> 1h window · completed assignments: <b>0</b> · interruption warnings: <b>11,000+</b> · every message at receive-count 3 → DLQ. The breaker built to protect the system was the thing draining it.</div>
+
+<figure class="vi">
+<div class="panel">
+<div class="panel-head"><span class="lamp crit"></span> failure mode · abort-on-open → redeliver → repeat → DLQ</div>
+<div class="panel-body">
+<svg viewBox="0 0 900 200" width="100%" role="img" aria-label="A leased assignment hits the shared egress infrastructure; the breaker opens and aborts; the message returns to the queue and is re-leased, repeating three times until it dead-letters.">
+<defs><marker id="arrc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ee3923"/></marker></defs>
+<g class="node"><rect x="40" y="80" width="110" height="46" rx="10"/><text class="nlabel" x="95" y="107" text-anchor="middle">Queue</text></g>
+<g class="node"><rect x="250" y="80" width="110" height="46" rx="10"/><text class="nlabel" x="305" y="107" text-anchor="middle">Worker</text></g>
+<g class="node accent"><rect x="460" y="80" width="120" height="46" rx="10"/><text class="nlabel" x="520" y="101" text-anchor="middle">Shared egress</text><text class="elabel" x="520" y="116" text-anchor="middle">degraded</text></g>
+<g class="node crit"><rect x="690" y="80" width="120" height="46" rx="10"/><text class="nlabel" x="750" y="107" text-anchor="middle" style="fill:#ee3923">DLQ</text></g>
+<path class="edge" d="M150,103 L248,103" marker-end="url(#arrc)" stroke="#ee3923"/><text class="elabel" x="199" y="94" text-anchor="middle">lease</text>
+<path class="edge" d="M360,96 L458,98" marker-end="url(#arrc)" stroke="#ee3923"/>
+<path d="M470,120 C380,175 200,175 110,128" fill="none" stroke="#ee3923" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arrc)"/>
+<text class="elabel" x="300" y="172" text-anchor="middle" style="fill:#ee3923">breaker opens → abort → redeliver ✕3</text>
+<path class="edge" d="M360,110 C520,150 620,120 688,110" marker-end="url(#arrc)" stroke="#ee3923"/>
+<text class="elabel" x="560" y="150" text-anchor="middle">receive-count 3</text>
+</svg>
+</div>
+</div>
+<figcaption>A breaker on a <b>shared</b> dependency across a <b>fleet</b> doesn't isolate failure; it correlates it. Every worker tripped together, and abort-on-open fed the DLQ.</figcaption>
+</figure>
+
+The fix had two halves. Stop treating "circuit open" as "fail the work"; treat it as "wait":
+
+```js
+while (breaker.opened) {
+  await sleep(WAIT_MS + jitter());  // jitter so the fleet doesn't wake in lockstep
+}                                    // heartbeat keeps the message invisible; no receive burned
+return breaker.fire(req);            // only shutdown aborts; everything else retries in place
+```
+
+The jitter matters: without it, "wait then retry" just moves the synchronised stampede a second to the right, so every worker still wakes together and re-trips the breaker in lockstep. Jitter spreads the wake-ups, and the breaker's reset is a single half-open trial rather than the whole fleet firing at once. Then retune so it fires on a real outage, not on the ambient error rate of a dependency that fails a fraction of calls by nature: threshold to 75% over a thirty-second window with a volume floor of a hundred requests, reset probe every five seconds. The retry budget stopped being spent on a dependency that was going to fail the same way three times in a row.
+
+### 02 · Misleading bug (search) · The pagination that impersonated a capacity problem
+
+Load-testing search, the cluster began returning `429` across the board: "too many point-in-time contexts." It read like we'd outgrown the search tier. We hadn't. Deep pagination opened a point-in-time reader per result page to mint a stable cursor, released only if the caller paged all the way to the end. Almost nobody pages to the end. Each reader lived for its keep-alive window, and under load the single-page searches (the overwhelming majority) opened them faster than they expired, until we hit the cluster-wide cap and *every* query started failing, regardless of size.
+
+<figure class="vi">
+<div class="panel">
+<div class="panel-head"><span class="lamp crit"></span> open point-in-time readers → cluster cap → blanket 429</div>
+<div class="panel-body">
+<svg viewBox="0 0 900 220" width="100%" role="img" aria-label="Open reader count climbs steadily with the number of searches until it hits the cluster cap of 300, after which all queries return 429.">
+<g class="grid"><line x1="60" y1="30" x2="60" y2="170"/><line x1="60" y1="170" x2="860" y2="170"/></g>
+<line x1="60" y1="52" x2="860" y2="52" stroke="#ee3923" stroke-width="1.4" stroke-dasharray="6 4"/>
+<text x="856" y="46" text-anchor="end" font-size="11" font-family="var(--font-mono,monospace)" style="fill:#ee3923">cluster cap · 300 readers</text>
+<path d="M60,168 C220,150 360,120 470,90 C540,72 580,58 610,52" fill="none" stroke="#4c8df9" stroke-width="2.5"/>
+<path d="M610,52 L860,52" fill="none" stroke="#ee3923" stroke-width="2.5"/>
+<rect x="610" y="30" width="250" height="140" fill="#ee3923" opacity=".08"/>
+<text x="735" y="115" text-anchor="middle" font-size="13" font-weight="700" font-family="var(--font-mono,monospace)" style="fill:#ee3923">429 on everything</text>
+<circle cx="610" cy="52" r="4.5" fill="#ee3923"/>
+<text x="60" y="190" font-size="11" font-family="var(--font-mono,monospace)" style="fill:#7e93a9">number of searches →</text>
+<text x="30" y="100" font-size="11" font-family="var(--font-mono,monospace)" style="fill:#7e93a9" transform="rotate(-90 30 100)">open readers →</text>
+</svg>
+</div>
+</div>
+<figcaption>The tell: the failure scaled with the <b>number of searches</b>, not the <b>size of the data</b>. That's never what a real capacity wall looks like; it was a resource leak in the cursor.</figcaption>
+</figure>
+
+We deleted the point-in-time approach entirely and made the cursor stateless: an opaque token carrying only the sort key of the last hit, resolved against the live index on the next call:
+
+```http
+// cursor = base64url( JSON.stringify(lastHit.sort) )
+GET content_index/_search
+{ "size": N, "sort": [ … ], "search_after": decode(cursor) }
+```
+
+Zero server-side state, so nothing to leak and unbounded concurrent paginators. The tradeoff we accepted out loud: this gives best-effort consistency, not a frozen snapshot, so a document indexed mid-traversal can shift a page boundary. For an append-mostly index that's fine, and a strict point-in-time export was deferred to a separate internal path.
+
+### 03 · Cost win (language detection) · The GPU we were about to buy and didn't
+
+Language detection gates the expensive transcription step; only allowed-language clips go on to transcribe. We'd implemented it by running a general speech model on CPU, and under load it pinned at ~95% and became the pipeline's bottleneck. The obvious fix was GPUs, alongside transcription. We built that migration and *measured* it before committing, and the GPU sat ~94% idle. Per message ran ~2.6s end to end, but the model forward pass was ~0.3 to 0.6s of it; the rest was audio decode, voice-activity detection, and feature extraction, all on the CPU. Which meant the GPU couldn't keep up either: two nodes cleared maybe 290 clips a minute against a firehose north of 700 a minute. A fleet of mostly-idle GPUs isn't an answer.
+
+<figure class="vi">
+<div class="panel">
+<div class="panel-head"><span class="lamp"></span> per-message time · ~2.6s · where it goes</div>
+<div class="panel-body">
+<svg viewBox="0 0 900 156" width="100%" role="img" aria-label="Of about 2.6 seconds per message, roughly 2 seconds is CPU-side decode, voice-activity detection and feature extraction; only about 0.45 seconds is the GPU model forward pass.">
+<rect x="60" y="26" width="700" height="32" rx="8" fill="#21384f"/>
+<rect x="60" y="26" width="536" height="32" rx="8" fill="#faca2b"/>
+<rect x="600" y="26" width="160" height="32" rx="8" fill="#4c8df9"/>
+<text x="770" y="47" font-size="11" font-family="var(--font-mono,monospace)" style="fill:#7e93a9">≈2.6s total</text>
+<rect x="60" y="82" width="11" height="11" rx="2" fill="#faca2b"/>
+<text x="80" y="92" font-size="12.5" font-weight="700" font-family="var(--font-mono,monospace)" style="fill:#eef4fb">CPU preprocessing</text>
+<text x="80" y="110" font-size="11" font-family="var(--font-mono,monospace)" style="fill:#7e93a9">decode · VAD · features · ~2.0s, about 77% of the time</text>
+<rect x="500" y="82" width="11" height="11" rx="2" fill="#4c8df9"/>
+<text x="520" y="92" font-size="12.5" font-weight="700" font-family="var(--font-mono,monospace)" style="fill:#eef4fb">GPU forward pass</text>
+<text x="520" y="110" font-size="11" font-family="var(--font-mono,monospace)" style="fill:#7e93a9">~0.45s · the part a GPU accelerates</text>
+<text x="60" y="140" font-size="11.5" font-family="var(--font-mono,monospace)" style="fill:#7e93a9">More GPUs would have accelerated the ~17% that wasn't the bottleneck.</text>
+</svg>
+</div>
+</div>
+<figcaption>The near-miss: spending on the resource that <b>looked</b> scarce (GPU) to fix a bottleneck that lived one layer over (CPU preprocessing).</figcaption>
+</figure>
+
+So we went the other way. The model that finally kept pace I found at about 2am, once it was clear the GPU path was a dead end: a small ~85 MB classifier built for exactly one job, on cheap CPU. I cut the input work feeding it, too. It cleared the inbound stream (roughly **125K clips in under five hours**, dead-letter rate under 0.03%), kept pace on commodity cores, and handed the entire GPU pool back to transcription, where the forward pass dominates and a GPU earns its cost. The CPU classifier that replaced the GPU fleet we were about to provision runs at a fraction of the cost. Measuring the migration before funding it is what stopped the spend.
+
+<div class="vi-log ok"><b>[resolved]</b> language detection off the GPU pool · ~125K clips / &lt;5h · DLQ &lt;0.03% · GPU pool returned to transcription.</div>
+
+## What I'd do differently
+
+I'd model the shared-dependency failure mode *before* reaching for the circuit breaker; the correlated-trip behaviour is obvious once you say "shared" and "fleet" in the same sentence. I'd have caught the point-in-time leak with one test: issue a single-page search and assert the server-side reader count returns to baseline. And I'd have killed the "provision a database and a cache for now" reflex sooner. Both were deleted unused, and while they sat there they were a false signal that the system was more stateful than it is. The real shape (queues, object store, search index, one tiny cursor) was there from the start.
+
+## For teams building similar systems
+
+Make one config value your global throttle and keep it independent of fleet size. Put a queue between every pair of stages and decide, per boundary, whether overload should wait or shed; don't let it be an accident. Make every write order-independent and replay-safe before you let yourself retry aggressively, because aggressive retries are your cheapest availability. Verify from the outside in against real infrastructure, and validate against real data: the design doc settles the arguments, the system test catches the bugs, and real data catches the assumptions. And when a stage is slow, profile where the milliseconds go before you buy the resource that looks scarce; the bottleneck is usually one layer over from where it hurts.
+
+None of this is exotic. Most of it is a refusal to couple things that don't need coupling, which is what lets one number move without dragging the rest of the system along with it.
+
+<p class="vi-bio"><a href="https://www.linkedin.com/in/doron-tsur">Doron Tsur</a> leads platform and data-infrastructure engagements at <a href="https://codo.tech">Codo</a>: distributed systems, search, and the infrastructure underneath them.</p>

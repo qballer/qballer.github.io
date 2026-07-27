@@ -7,6 +7,8 @@ interface Props {
   image?: string;
   type?: 'website' | 'article';
   noindex?: boolean;
+  // Absolute URL to credit as canonical (cross-posts). Defaults to this page.
+  canonicalUrl?: string;
 }
 
 const {
@@ -15,10 +17,11 @@ const {
   image = SITE.ogImage,
   type = 'website',
   noindex = false,
+  canonicalUrl,
 } = Astro.props;
 
 const pageTitle = title ? `${title} · ${SITE.name}` : SITE.title;
-const canonical = new URL(Astro.url.pathname, SITE.url).href;
+const canonical = canonicalUrl ?? new URL(Astro.url.pathname, SITE.url).href;
 const imageUrl = new URL(image, SITE.url).href;
 ---
 
